@@ -1,11 +1,71 @@
-﻿
+﻿@model User
 @using Microsoft.AspNetCore.Http
 @{
     @using Race_boat_app.Models;
     @using Microsoft.AspNetCore.Http
     ViewData["Title"] = "Profile";
-    var user = ViewData.Model;
+
 }
 
-@Context.Session.GetString("_Name")
-<p>@user.FirstName</p>
+@if (Context.Session.GetString("_LoggedIn") == "true")
+{
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 mx-auto">
+                        <!-- form card login -->
+                        <div class="card rounded-0">
+                            <div class="card-header">
+                                <h3 class="mb-0">Login</h3>
+                            </div>
+                            <div class="card-body">
+                                <form class="form" method="post" action="@Url.Action("UpdateUser", "User")">
+                                    ID: <input class="form-control form-control-lg rounded-0" disabled value=@Context.Session.GetString("_ID") />
+                                    FirstName: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_Name") asp-for="FirstName" />
+                                    LastName: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_LastName") asp-for="LastName" />
+                                    Dob: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_DOB") asp-for="DOB" />
+                                    Position: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_Posistion") asp-for="Posistion" />
+                                    Address: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_Address") asp-for="Address" />
+                                    Postcode: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_PostCode") asp-for="PostCode" />
+                                    City: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_City") asp-for="City" />
+                                    Email: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_Email") asp-for="Email" disabled/>
+                                    Phonenumber: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_PhoneNumber") asp-for="PhoneNumber" />
+                                    Mobile: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_MobileNumber") asp-for="MobilePhoneNumber" />
+                                    Team: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_Team")  asp-for="Team" disabled/>
+                                    Points: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_Points")  asp-for="Points" disabled/>
+                                    <button type="submit" class="btn btn-success btn-lg float-right" id="submitAll">Submit</button>
+                                </form>
+                            </div>
+                            <!--/card-block-->
+                        </div>
+                        <!-- /form card login -->
+                    </div>
+                </div>
+                <!--/row-->
+            </div>
+            <!--/col-->
+        </div>
+        <!--/row-->
+    </div>
+    <!--/container-->
+    
+    
+   
+    
+   
+    
+   
+    
+    
+    
+    
+    
+   
+
+
+}
+@if (Context.Session.GetString("_LoggedIn") == "false")
+{
+    <p>Nothing to see here</p>
+}

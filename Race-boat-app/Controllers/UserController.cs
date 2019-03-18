@@ -26,12 +26,80 @@ namespace Race_boat_app.Controllers
 
         public IActionResult Register()
         {
-            return View();
+            return View("Register");
+        }
+
+        public IActionResult Profile()
+        {
+            return View("profile");
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateUser(User user)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    user.Password = HttpContext.Session.GetString("_Password");
+                    user.Email = HttpContext.Session.GetString("_Email");
+                    user.Points = HttpContext.Session.GetString("_Points");
+                    user.Team = HttpContext.Session.GetString("_Team");
+                    User crypto = new User();
+                    crypto.FirstName = Crypto.Encrypt(user.FirstName, passPhrase);
+                    crypto.Posistion = Crypto.Encrypt(user.Posistion, passPhrase);
+                    crypto.Address = Crypto.Encrypt(user.Address, passPhrase);
+                    crypto.City = Crypto.Encrypt(user.City, passPhrase);
+                    crypto.DOB = Crypto.Encrypt(user.DOB, passPhrase);
+                    crypto.Email = Crypto.Encrypt(user.Email, passPhrase);
+                    crypto.LastName = Crypto.Encrypt(user.LastName, passPhrase);
+                    crypto.PostCode = Crypto.Encrypt(user.PostCode, passPhrase);
+                    crypto.Password = Crypto.Encrypt(user.Password, passPhrase);
+                    crypto.Team = Crypto.Encrypt(user.Team, passPhrase);
+                    crypto.Points = Crypto.Encrypt(user.Points, passPhrase);
+                    crypto.PhoneNumber = Crypto.Encrypt(user.PhoneNumber, passPhrase);
+                    crypto.MobilePhoneNumber = Crypto.Encrypt(user.MobilePhoneNumber, passPhrase);
+                    crypto.Id = HttpContext.Session.GetString("_ID");
+                    await UpdateUserAsync(crypto);
+                    var url = "https://localhost:44389/api/1.0/user/" + HttpContext.Session.GetString("_ID");
+                    User encUser = await GetUserAsync(url.ToString());
+                    User decUser = DecryptUser(encUser);
+
+
+                    //HttpContext.Session.Set("User", Encoding.UTF8.GetBytes(decUser.FirstName));
+                    HttpContext.Session.SetString("_LoggedIn", "true");
+                    HttpContext.Session.SetString("_Name", decUser.FirstName);
+
+                    HttpContext.Session.SetString("_ID", decUser.Id);
+                    HttpContext.Session.SetString("_Email", decUser.Email);
+
+                    HttpContext.Session.SetString("_LastName", decUser.LastName);
+                    HttpContext.Session.SetString("_Address", decUser.Address);
+                    HttpContext.Session.SetString("_PostCode", decUser.PostCode);
+                    HttpContext.Session.SetString("_City", decUser.City);
+                    HttpContext.Session.SetString("_DOB", decUser.DOB);
+                    HttpContext.Session.SetString("_Team", decUser.Team);
+                    HttpContext.Session.SetString("_Points", decUser.Points);
+                    HttpContext.Session.SetString("_PhoneNumber", decUser.PhoneNumber);
+                    HttpContext.Session.SetString("_MobileNumber", decUser.MobilePhoneNumber);
+                    HttpContext.Session.SetString("_Posistion", decUser.Posistion);
+
+                    return View("profile", decUser);
+                }
+
+                return View("profile");
+            }
+            catch (Exception e)
+            {
+                return View("Error");
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult> RegisterUser(User user)
         {
+            try { 
             if (ModelState.IsValid)
             {
                 User crypto = new User();
@@ -50,17 +118,44 @@ namespace Race_boat_app.Controllers
                 crypto.MobilePhoneNumber = Crypto.Encrypt(user.MobilePhoneNumber, passPhrase);
                 var url = await CreateUserAsync(crypto);
                 User encUser = await GetUserAsync(url.ToString());
+                //string points = DecryptPoints(encUser);
                 User decUser = DecryptUser(encUser);
+                //decUser.Points = DecryptPoints(decUser.Points);
 
 
                 //HttpContext.Session.Set("User", Encoding.UTF8.GetBytes(decUser.FirstName));
                 HttpContext.Session.SetString("_LoggedIn", "true");
                 HttpContext.Session.SetString("_Name", decUser.FirstName);
-                
+
+                HttpContext.Session.SetString("_ID", decUser.Id);
+                HttpContext.Session.SetString("_Email", decUser.Email);
+
+                HttpContext.Session.SetString("_LastName", decUser.LastName);
+                HttpContext.Session.SetString("_Address", decUser.Address);
+                HttpContext.Session.SetString("_PostCode", decUser.PostCode);
+                HttpContext.Session.SetString("_City", decUser.City);
+                HttpContext.Session.SetString("_DOB", decUser.DOB);
+                HttpContext.Session.SetString("_Team", decUser.Team);
+                HttpContext.Session.SetString("_Points", decUser.Points);
+                HttpContext.Session.SetString("_PhoneNumber", decUser.PhoneNumber);
+                HttpContext.Session.SetString("_MobileNumber", decUser.MobilePhoneNumber);
+                HttpContext.Session.SetString("_Posistion", decUser.Posistion);
+                HttpContext.Session.SetString("_Password", decUser.Password);
+
                 return View("profile", decUser);
             }
 
             return View("profile");
+            }
+            catch(Exception e)
+            {
+                return View("Error");
+            }
+        }
+
+        static string DecryptPoints(string points) {
+            string point2 = Crypto.Decrypt(points, passPhrase2);
+            return point2;
         }
 
         static User DecryptUser(User user) {
@@ -72,10 +167,22 @@ namespace Race_boat_app.Controllers
             user.LastName = Crypto.Decrypt(user.LastName, passPhrase);
             user.PostCode = Crypto.Decrypt(user.PostCode, passPhrase);
             user.Password = Crypto.Decrypt(user.Password, passPhrase);
-            user.Team = Crypto.Decrypt(user.Team, passPhrase2);
+            user.Team = Crypto.Decrypt(user.Team, passPhrase);
             user.Posistion = Crypto.Decrypt(user.Posistion, passPhrase);
             user.PhoneNumber = Crypto.Decrypt(user.PhoneNumber, passPhrase);
             user.MobilePhoneNumber = Crypto.Decrypt(user.MobilePhoneNumber, passPhrase);
+            user.Points = Crypto.Decrypt(user.Points, passPhrase);
+            return user;
+        }
+
+        static async Task<User> UpdateUserAsync(User user)
+        {
+            HttpResponseMessage response = await client.PutAsJsonAsync(
+                $"https://localhost:44389/api/1.0/user/{ user.Id}", user);
+            response.EnsureSuccessStatusCode();
+
+            // Deserialize the updated product from the response body.
+            user = await response.Content.ReadAsAsync<User>();
             return user;
         }
 

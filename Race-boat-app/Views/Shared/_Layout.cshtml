@@ -63,7 +63,17 @@
                     }
                 </li>
                 <li class="nav-item" style="display:inline">
-                    <a class="btn btn-outline-light my-2 my-sm-0" asp-area="" asp-controller="Home" asp-action="Contact">Register</a>
+                    @if (Context.Session.GetString("_LoggedIn") == "false")
+                    {
+                        <a class="btn btn-outline-light my-2 my-sm-0" asp-area="" asp-controller="User" asp-action="Register">Register</a>
+                    }
+
+
+                    @if (Context.Session.GetString("_LoggedIn") == "true")
+                    {
+                        <a class="btn btn-outline-light my-2 my-sm-0" asp-area="" asp-controller="User" asp-action="Profile"> @Context.Session.GetString("_Name")</a>
+                    }
+
                 </li>
             </form>
         </div>

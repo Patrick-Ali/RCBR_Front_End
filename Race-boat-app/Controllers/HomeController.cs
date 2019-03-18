@@ -14,6 +14,7 @@ namespace Race_boat_app.Controllers
     {
         static HttpClient client = new HttpClient();
         private static readonly string passPhrase = "l%HJb5N^O@fl0K02H9PsxlR9algJTzK7ARBjJsd3fPG0&GwkrU";
+        private static readonly string passPhrase2 = "yUVyb$shjp4*%S6G!fx5t%i!fTZ@b8KQ#ymQyfhgNQ$#mKB0vA";
 
         public IActionResult Index()
         {
@@ -29,6 +30,27 @@ namespace Race_boat_app.Controllers
         public IActionResult AdminLogin()
         {
             return View();
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.SetString("_LoggedIn", "false");
+            HttpContext.Session.SetString("_Name", "Empty");
+
+            HttpContext.Session.SetString("_ID", "Empty");
+            HttpContext.Session.SetString("_Email", "Empty");
+
+            HttpContext.Session.SetString("_LastName", "Empty");
+            HttpContext.Session.SetString("_Address", "Empty");
+            HttpContext.Session.SetString("_PostCode", "Empty");
+            HttpContext.Session.SetString("_City", "Empty");
+            HttpContext.Session.SetString("_DOB", "Empty");
+            HttpContext.Session.SetString("_Team", "Empty");
+            HttpContext.Session.SetString("_Points", "Empty");
+            HttpContext.Session.SetString("_PhoneNumber", "Empty");
+            HttpContext.Session.SetString("_MobileNumber", "Empty");
+            HttpContext.Session.SetString("_Posistion", "Empty");
+            return View("Index");
         }
 
         [HttpPost]
@@ -50,11 +72,38 @@ namespace Race_boat_app.Controllers
             User tempUser = await GetUserAsync(tempURL.ToString());
             string id = tempUser.Id;
             string email = Crypto.Decrypt(tempUser.Email, passPhrase);
+            string firstname = Crypto.Decrypt(tempUser.FirstName, passPhrase);
+            string lastname = Crypto.Decrypt(tempUser.LastName, passPhrase);
+            string address = Crypto.Decrypt(tempUser.Address, passPhrase);
+            string city = Crypto.Decrypt(tempUser.City, passPhrase);
+            string dob = Crypto.Decrypt(tempUser.DOB, passPhrase);
+            string postCode = Crypto.Decrypt(tempUser.PostCode, passPhrase);
+            string team = Crypto.Decrypt(tempUser.Team, passPhrase);
+            string points = Crypto.Decrypt(tempUser.Points, passPhrase);
+            string phoneNumber = Crypto.Decrypt(tempUser.PhoneNumber, passPhrase);
+            string mobileNumber = Crypto.Decrypt(tempUser.MobilePhoneNumber, passPhrase);
+            string posistion = Crypto.Decrypt(tempUser.Posistion, passPhrase);
+            string password = Crypto.Decrypt(tempUser.Password, passPhrase);
             OutLogin final = new OutLogin()
             {
                 Email = email,
                 Id = id
             };
+            HttpContext.Session.SetString("_Name", firstname);
+            HttpContext.Session.SetString("_ID", id);
+            HttpContext.Session.SetString("_Email", email);
+            HttpContext.Session.SetString("_LoggedIn", "true");
+            HttpContext.Session.SetString("_LastName", lastname);
+            HttpContext.Session.SetString("_Address", address);
+            HttpContext.Session.SetString("_PostCode", postCode);
+            HttpContext.Session.SetString("_City", city);
+            HttpContext.Session.SetString("_DOB", dob);
+            HttpContext.Session.SetString("_Team", team);
+            HttpContext.Session.SetString("_Points", points);
+            HttpContext.Session.SetString("_PhoneNumber", phoneNumber);
+            HttpContext.Session.SetString("_MobileNumber", mobileNumber);
+            HttpContext.Session.SetString("_Posistion", posistion);
+            HttpContext.Session.SetString("_Password", password);
             return View("Index");
             //OutLogin temp = response.Content.ReadAsAsync<OutLogin>();
 
