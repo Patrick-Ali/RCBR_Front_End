@@ -1,0 +1,11 @@
+﻿
+@using Microsoft.AspNetCore.Http
+@{
+    @using Race_boat_app.Models;
+    @using Microsoft.AspNetCore.Http
+    ViewData["Title"] = "Profile";
+    var user = ViewData.Model;
+}
+
+@Context.Session.GetString("_Name")
+<p>@user.FirstName</p>
