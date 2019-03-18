@@ -17,7 +17,7 @@
                         <!-- form card login -->
                         <div class="card rounded-0">
                             <div class="card-header">
-                                <h3 class="mb-0">Login</h3>
+                                <h3 class="mb-0">@Context.Session.GetString("_Name")'s Profile</h3>
                             </div>
                             <div class="card-body">
                                 <form class="form" method="post" action="@Url.Action("UpdateUser", "User")">
@@ -29,13 +29,19 @@
                                     Address: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_Address") asp-for="Address" />
                                     Postcode: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_PostCode") asp-for="PostCode" />
                                     City: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_City") asp-for="City" />
-                                    Email: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_Email") asp-for="Email" disabled/>
+                                    Email: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_Email") asp-for="Email" disabled />
                                     Phonenumber: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_PhoneNumber") asp-for="PhoneNumber" />
                                     Mobile: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_MobileNumber") asp-for="MobilePhoneNumber" />
-                                    Team: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_Team")  asp-for="Team" disabled/>
-                                    Points: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_Points")  asp-for="Points" disabled/>
-                                    <button type="submit" class="btn btn-success btn-lg float-right" id="submitAll">Submit</button>
+                                    Team: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_Team") asp-for="Team" disabled />
+                                    Points: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_Points") asp-for="Points" disabled />
+                                    <button type="submit" class="btn btn-success btn-lg float-right" id="submitAll">Update</button>
                                 </form>
+                                @if (@Context.Session.GetString("_Posistion") == "Captain")
+                                {
+                                    <form action="@Url.Action("ViewBoat", "Boat")">
+                                        <button type="submit" class="btn btn-success btn-lg float-left">View Boat</button>
+                                    </form>
+                                }
                             </div>
                             <!--/card-block-->
                         </div>
