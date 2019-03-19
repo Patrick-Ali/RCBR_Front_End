@@ -13,8 +13,8 @@ namespace Race_boat_app.Controllers
     {
 
         static HttpClient client = new HttpClient();
+        private static readonly string passPhrase = "l%HJb5N^O@fl0K02H9PsxlR9algJTzK7ARBjJsd3fPG0&GwkrU";
 
-        
 
         public async Task<IActionResult> All()
         {
@@ -23,10 +23,27 @@ namespace Race_boat_app.Controllers
             foreach(var user in teams)
             {
                 User usr = await GetUserAsync("https://localhost:44389/api/1.0/user/" + user.CaptainID);
+                usr = DecryptUser(usr);
                 users.Add(usr);
             }
-            
-            return View("Teams", users);
+            ViewData["users"] = users;
+            return View("Teams");
+        }
+
+        public async Task<IActionResult> JoinTeam(Join join) {
+            //var hold = Request.Form["Team"];
+            //var id = Request.Form["ID"];
+            User user1 = await UpdateUser();
+            List<Team> teams = await GetTeamsAsync("https://localhost:44389/api/1.0/team");
+            List<User> users = new List<User>();
+            foreach (var user in teams)
+            {
+                User usr = await GetUserAsync("https://localhost:44389/api/1.0/user/" + user.CaptainID);
+                usr = DecryptUser(usr);
+                users.Add(usr);
+            }
+            ViewData["users"] = users;
+            return View("Teams");
         }
 
         public async Task<IActionResult> CreateTeam()
@@ -38,16 +55,93 @@ namespace Race_boat_app.Controllers
                 PitID = "null",
                 Recruiting = "true"
             };
-            await CreateTeamAsync(temp);
+            var url = await CreateTeamAsync(temp);
+            Team team = await GetTeamAsync(url.ToString());
+            HttpContext.Session.SetString("_Team", team.Id);
+            User user1 = await UpdateUser();
             List<Team> teams = await GetTeamsAsync("https://localhost:44389/api/1.0/team");
             List<User> users = new List<User>();
             foreach (var user in teams)
             {
                 User usr = await GetUserAsync("https://localhost:44389/api/1.0/user/" + user.CaptainID);
+                usr = DecryptUser(usr);
                 users.Add(usr);
             }
+            ViewData["users"] = users;
+            return View("Teams");
+        }
 
-            return View("Teams", users);
+       async Task<User> UpdateUser() {
+            User user = new User();
+            user.FirstName = HttpContext.Session.GetString("_Name");
+
+            user.Id = HttpContext.Session.GetString("_ID");
+            user.Email = HttpContext.Session.GetString("_Email");
+
+            user.LastName = HttpContext.Session.GetString("_LastName");
+            user.Address = HttpContext.Session.GetString("_Address");
+            user.PostCode = HttpContext.Session.GetString("_PostCode");
+            user.City = HttpContext.Session.GetString("_City");
+            user.DOB = HttpContext.Session.GetString("_DOB");
+            user.Team = HttpContext.Session.GetString("_Team");
+            user.Points = HttpContext.Session.GetString("_Points");
+            user.PhoneNumber = HttpContext.Session.GetString("_PhoneNumber");
+            user.MobilePhoneNumber = HttpContext.Session.GetString("_MobileNumber");
+            user.Posistion = HttpContext.Session.GetString("_Posistion");
+            user.Password = HttpContext.Session.GetString("_Password");
+
+            User crypto = new User();
+            crypto.FirstName = Crypto.Encrypt(user.FirstName, passPhrase);
+            crypto.Posistion = Crypto.Encrypt(user.Posistion, passPhrase);
+            crypto.Address = Crypto.Encrypt(user.Address, passPhrase);
+            crypto.City = Crypto.Encrypt(user.City, passPhrase);
+            crypto.DOB = Crypto.Encrypt(user.DOB, passPhrase);
+            crypto.Email = Crypto.Encrypt(user.Email, passPhrase);
+            crypto.LastName = Crypto.Encrypt(user.LastName, passPhrase);
+            crypto.PostCode = Crypto.Encrypt(user.PostCode, passPhrase);
+            crypto.Password = Crypto.Encrypt(user.Password, passPhrase);
+            crypto.Team = Crypto.Encrypt(user.Team, passPhrase);
+            crypto.Points = Crypto.Encrypt(user.Points, passPhrase);
+            crypto.PhoneNumber = Crypto.Encrypt(user.PhoneNumber, passPhrase);
+            crypto.MobilePhoneNumber = Crypto.Encrypt(user.MobilePhoneNumber, passPhrase);
+            crypto.Id = HttpContext.Session.GetString("_ID");
+            await UpdateUserAsync(crypto);
+            var url = "https://localhost:44389/api/1.0/user/" + HttpContext.Session.GetString("_ID");
+            User encUser = await GetUserAsync(url.ToString());
+            User decUser = DecryptUser(encUser);
+
+            return decUser;
+
+
+        }
+
+        static User DecryptUser(User user)
+        {
+            user.Address = Crypto.Decrypt(user.Address, passPhrase);
+            user.City = Crypto.Decrypt(user.City, passPhrase);
+            user.DOB = Crypto.Decrypt(user.DOB, passPhrase);
+            user.Email = Crypto.Decrypt(user.Email, passPhrase);
+            user.FirstName = Crypto.Decrypt(user.FirstName, passPhrase);
+            user.LastName = Crypto.Decrypt(user.LastName, passPhrase);
+            user.PostCode = Crypto.Decrypt(user.PostCode, passPhrase);
+            user.Password = Crypto.Decrypt(user.Password, passPhrase);
+            user.Team = Crypto.Decrypt(user.Team, passPhrase);
+            user.Posistion = Crypto.Decrypt(user.Posistion, passPhrase);
+            user.PhoneNumber = Crypto.Decrypt(user.PhoneNumber, passPhrase);
+            user.MobilePhoneNumber = Crypto.Decrypt(user.MobilePhoneNumber, passPhrase);
+            user.Points = Crypto.Decrypt(user.Points, passPhrase);
+            return user;
+        }
+
+        static async Task<User> UpdateUserAsync(User user)
+        {
+            HttpResponseMessage response = await client.PutAsJsonAsync(
+                $"https://localhost:44389/api/1.0/user/{ user.Id}", user);
+            response.EnsureSuccessStatusCode();
+
+            // Deserialize the updated product from the response body.
+            user = await response.Content.ReadAsAsync<User>();
+            return user;
         }
 
         static async Task<Uri> CreateTeamAsync(Team team)
@@ -80,6 +174,17 @@ namespace Race_boat_app.Controllers
                 user = await response.Content.ReadAsAsync<User>();
             }
             return user;
+        }
+
+        static async Task<Team> GetTeamAsync(string path)
+        {
+            Team team = null;
+            HttpResponseMessage response = await client.GetAsync(path);
+            if (response.IsSuccessStatusCode)
+            {
+                team = await response.Content.ReadAsAsync<Team>();
+            }
+            return team;
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Http
+@model Join
 @{
     ViewData["Title"] = "Teams";
-    var users = ViewData.Model;
+    var users = ViewData["users"] as List<User>;
 }
 
 <div class="container">
@@ -9,7 +10,7 @@
         <div class="heading-title text-center">
             <h3 class="text-uppercase">Team List</h3>
             <p class="p-top-30 half-txt">Nam pulvinar vitae neque et porttitor. Praesent sed nisi eleifend. Nam pulvinar vitae neque et porttitor. Praesent sed nisi eleifend. </p>
-            @if (@Context.Session.GetString("_Posistion") == "Captain" && Context.Session.GetString("_LoggedIn") == "true")
+            @if (@Context.Session.GetString("_Posistion") == "Captain" && Context.Session.GetString("_LoggedIn") == "true" && Context.Session.GetString("_Team") == "null")
             {
                 <form action="@Url.Action("CreateTeam", "Team")">
                     <button type="submit" class="btn btn-success btn-lg float-right">Create Team</button>
@@ -29,9 +30,15 @@
                             <p>@user.Email</p>
                             <p>@user.MobilePhoneNumber</p>
                         </div>
+                        @if (Context.Session.GetString("_LoggedIn") == "true" && Context.Session.GetString("_Team") == "null") { 
                         <div class="s-link">
-                            <button class="btn btn-outline-primary">Join Team</button>
+                            <form action="@Url.Action("JoinTeam", "Team")">
+                                <input value=@user.Team type="hidden" asp-for="TeamID"/>
+                                <input value=@user.Id  type="hidden" asp-for="Joiner"/>
+                                <button type="submit" class="btn btn-success btn-sm float-left">Join Team</button>
+                            </form>
                         </div>
+                        }
                     </div>
                 </div>
                 @*<div class="team-title">
