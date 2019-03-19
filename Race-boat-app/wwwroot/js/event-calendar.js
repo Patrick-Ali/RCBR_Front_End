@@ -46,8 +46,6 @@
             });
         },
         eventClick: function (calEvent, jsEvent, view) {
-            //alert(calEvent.start);
-            //alert('Event: ' + moment('29/02/2020T09:10:00.000').format('YYYY-MM-DD hh:mm'));
             console.log(calEvent.id);
             //UpdateEvent(calEvent.id);
             sessionStorage.setItem("e_id", calEvent.id);
@@ -59,8 +57,44 @@
             $('#eventSTime').html(calEvent.startTime);
             $('#eventETime').html(calEvent.endTime);
             $('#eventDesc').html(calEvent.description);
-            $('#eventSID').val(calEvent.id);
+            $('#eventSID1').val(calEvent.id);
+            $('#eventSID2').val(calEvent.id);
+            //$('#RegButton').val(calEvent.id);
+            $('#RegButton').attr('name', calEvent.id);
             $('#calendarModal').modal();
+            $('#RegButton').show();
+            console.log("Hello Id")
+            console.log($('#RegButton').attr("id"))
+            /*if ($('#RegButton').attr("id") != "RegButton" + calEvent.id) {
+                $('#RegButton').attr("id", "RegButton");
+                $('#RegButton').show();
+            }*/
+            var eventsDataArray = [];
+            $('#events li').each(function () {
+                eventsDataArray.push($(this).attr('data-store'));
+            });
+            var teamsDataArray = [];
+            $('#teams li').each(function () {
+                teamsDataArray.push($(this).attr('data-store'));
+            });
+            var userDataArray = [];
+            $('#user li').each(function () {
+                userDataArray.push($(this).attr('data-store'));
+            });
+            for (var i = 0; i < eventsDataArray.length; i++)
+            {
+                if (eventsDataArray[i] == calEvent.id && teamsDataArray[i] == userDataArray[0])
+                {
+                    if ($('#eventSID1').val() == calEvent.id) {
+                        //$('#RegButton').attr("id", "RegButton" + calEvent.id);
+                        //$('#RegButton' + calEvent.id).val(calEvent.id);
+                        $('[name="' + calEvent.id + '"]').hide();
+                    }
+                }
+            }
+            //alert(calEvent.start);
+            //alert('Event: ' + moment('29/02/2020T09:10:00.000').format('YYYY-MM-DD hh:mm'));
+
         },
 
         editable: false

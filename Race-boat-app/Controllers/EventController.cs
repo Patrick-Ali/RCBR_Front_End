@@ -14,8 +14,10 @@ namespace Race_boat_app.Controllers
     {
         static HttpClient client = new HttpClient();
 
-        public IActionResult All()
+        public async Task<IActionResult> All()
         {
+            List<EventReg> eventRegs = await GetEventRegsAsync("https://localhost:44389/api/1.0/eventReg");
+            ViewData["eventRegs"] = eventRegs;
             return View("Events");
         }
 
@@ -29,6 +31,29 @@ namespace Race_boat_app.Controllers
         {
             EventIn event1 = await GetEventAsync("https://localhost:44389/api/1.0/event/"+id);
             return RedirectToAction("EventRegister", event1);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterTeam(Download download)
+        {
+            List<EventReg> eventRegs = await GetEventRegsAsync("https://localhost:44389/api/1.0/eventReg");
+            ViewData["eventRegs"] = eventRegs;
+            foreach (var reg in eventRegs)
+            {
+                if (reg.EventID == download.Id && reg.TeamID == download.TeamId)
+                {
+
+                    return View("Events");
+                }
+            }
+            EventReg tempReg = new EventReg()
+            {
+                EventID = download.Id,
+                TeamID = download.TeamId
+            };
+            var url = await CreateEventRegAsync(tempReg);
+            RedirectToAction("All");
+            return View("Events");
         }
 
         /*public async Task<IActionResult> GetDownload(Download download) {
@@ -52,6 +77,8 @@ namespace Race_boat_app.Controllers
         [HttpPost]
         public async Task<ActionResult> Upload()
         {
+            List<EventReg> eventRegs = await GetEventRegsAsync("https://localhost:44389/api/1.0/eventReg");
+            ViewData["eventRegs"] = eventRegs;
             //var test = Request.Form.Files;
             foreach (var upload in Request.Form.Files)
             {
@@ -143,7 +170,37 @@ namespace Race_boat_app.Controllers
 
         }
 
+        static async Task<Uri> CreateEventRegAsync(EventReg eventReg)
+        {
+            HttpResponseMessage response = await client.PostAsJsonAsync(
+                "https://localhost:44389/api/1.0/eventReg", eventReg);
+            response.EnsureSuccessStatusCode();
+            var tempURL = response.Headers.Location;
+            Console.WriteLine(tempURL);
+            return response.Headers.Location;
+        }
 
+        static async Task<EventReg> GetEventRegAsync(string path)
+        {
+            EventReg eventReg = null;
+            HttpResponseMessage response = await client.GetAsync(path);
+            if (response.IsSuccessStatusCode)
+            {
+                eventReg = await response.Content.ReadAsAsync<EventReg>();
+            }
+            return eventReg;
+        }
+
+        static async Task<List<EventReg>> GetEventRegsAsync(string path)
+        {
+            List<EventReg> eventReg = null;
+            HttpResponseMessage response = await client.GetAsync(path);
+            if (response.IsSuccessStatusCode)
+            {
+                eventReg = await response.Content.ReadAsAsync<List<EventReg>>();
+            }
+            return eventReg;
+        }
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

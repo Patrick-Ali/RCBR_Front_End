@@ -26,6 +26,12 @@ namespace Race_boat_app.Controllers
                 usr = DecryptUser(usr);
                 users.Add(usr);
             }
+            List<string> recruiting = new List<string>();
+            foreach (var rec in teams)
+            {
+                recruiting.Add(rec.Recruiting);
+            }
+            ViewData["recruiting"] = recruiting;
             ViewData["users"] = users;
             return View("Teams");
         }
@@ -33,15 +39,28 @@ namespace Race_boat_app.Controllers
         public async Task<IActionResult> JoinTeam(Join join) {
             //var hold = Request.Form["Team"];
             //var id = Request.Form["ID"];
+
+            var url = "https://localhost:44389/api/1.0/team/" + join.TeamID;
+            Team team = await GetTeamAsync(url.ToString());
+            team.PitID = HttpContext.Session.GetString("_ID");
+            team.Recruiting = "false";
+            await UpdateTeamAsync(team);
+            HttpContext.Session.SetString("_Team", team.Id);
             User user1 = await UpdateUser();
-            List<Team> teams = await GetTeamsAsync("https://localhost:44389/api/1.0/team");
+            List <Team> teams = await GetTeamsAsync("https://localhost:44389/api/1.0/team");
             List<User> users = new List<User>();
+            List<string> recruiting = new List<string>();
             foreach (var user in teams)
             {
                 User usr = await GetUserAsync("https://localhost:44389/api/1.0/user/" + user.CaptainID);
                 usr = DecryptUser(usr);
                 users.Add(usr);
             }
+            foreach (var rec in teams)
+            {
+                recruiting.Add(rec.Recruiting);
+            }
+            ViewData["recruiting"] = recruiting;
             ViewData["users"] = users;
             return View("Teams");
         }
@@ -67,6 +86,12 @@ namespace Race_boat_app.Controllers
                 usr = DecryptUser(usr);
                 users.Add(usr);
             }
+            List<string> recruiting = new List<string>();
+            foreach (var rec in teams)
+            {
+                recruiting.Add(rec.Recruiting);
+            }
+            ViewData["recruiting"] = recruiting;
             ViewData["users"] = users;
             return View("Teams");
         }
@@ -113,6 +138,17 @@ namespace Race_boat_app.Controllers
             return decUser;
 
 
+        }
+
+        static async Task<Team> UpdateTeamAsync(Team team)
+        {
+            HttpResponseMessage response = await client.PutAsJsonAsync(
+                $"https://localhost:44389/api/1.0/team/{ team.Id}", team);
+            response.EnsureSuccessStatusCode();
+
+            // Deserialize the updated product from the response body.
+            team = await response.Content.ReadAsAsync<Team>();
+            return team;
         }
 
         static User DecryptUser(User user)
