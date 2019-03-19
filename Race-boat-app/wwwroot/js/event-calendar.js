@@ -25,6 +25,7 @@
                     var events = [];
                     //console.log("result",result);
                     $.each(result, function (i, data) {
+                        console.log(data.id)
                         events.push(
                             {
                                 id: data.id,
@@ -50,13 +51,15 @@
             console.log(calEvent.id);
             //UpdateEvent(calEvent.id);
             sessionStorage.setItem("e_id", calEvent.id);
-
+            console.log(calEvent.id)
+            console.log("click")
             $('#modalTitle').html(calEvent.title);
             $('#eventLoc').html(calEvent.location);
             $('#eventDate').html(calEvent.date);
             $('#eventSTime').html(calEvent.startTime);
             $('#eventETime').html(calEvent.endTime);
             $('#eventDesc').html(calEvent.description);
+            $('#eventSID').val(calEvent.id);
             $('#calendarModal').modal();
         },
 

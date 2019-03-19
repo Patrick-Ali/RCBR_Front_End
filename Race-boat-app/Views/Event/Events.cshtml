@@ -1,4 +1,4 @@
-﻿
+﻿@model Download
 @{
     ViewData["Title"] = "Events";
     var events = ViewData.Model;
@@ -41,7 +41,7 @@
             <!-- Modal body -->
             <div id="modalBody" class="modal-body">
                 <div class="col-md-12">
-                    <span class="col-md-4">Location</span>: 
+                    <span class="col-md-4">Location</span>:
                     <span class="col-md-7" id="eventLoc"></span>
                 </div>
                 <div class="col-md-12">
@@ -53,12 +53,20 @@
                     <span class="col-md-7" id="eventSTime"></span>
                 </div>
                 <div class="col-md-12">
-                    <span class="col-md-4">End Time</span>: 
+                    <span class="col-md-4">End Time</span>:
                     <span class="col-md-7" id="eventETime"></span>
                 </div>
                 <div class="col-md-12">
                     <span class="col-md-4">Desc</span>:
                     <span class="col-md-7" id="eventDesc"></span>
+                </div>
+                <div class="col-md-12">
+
+                    <form action="@Url.Action("Download", "Event")">
+                        <input id="eventSID" value="" type="hidden" asp-for="Id"/>
+                        <button type="submit" class="btn btn-success btn-sm float-left">Download Flyer</button>
+                    </form>
+
                 </div>
             </div>
 
