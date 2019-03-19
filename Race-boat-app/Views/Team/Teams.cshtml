@@ -1,15 +1,20 @@
-﻿
+﻿@using Microsoft.AspNetCore.Http
 @{
     ViewData["Title"] = "Teams";
     var users = ViewData.Model;
 }
-
 
 <div class="container">
     <div class="row">
         <div class="heading-title text-center">
             <h3 class="text-uppercase">Team List</h3>
             <p class="p-top-30 half-txt">Nam pulvinar vitae neque et porttitor. Praesent sed nisi eleifend. Nam pulvinar vitae neque et porttitor. Praesent sed nisi eleifend. </p>
+            @if (@Context.Session.GetString("_Posistion") == "Captain" && Context.Session.GetString("_LoggedIn") == "true")
+            {
+                <form action="@Url.Action("CreateTeam", "Team")">
+                    <button type="submit" class="btn btn-success btn-lg float-right">Create Team</button>
+                </form>
+            }
         </div>
         @foreach (var user in users)
         {
@@ -30,14 +35,11 @@
                     </div>
                 </div>
                 @*<div class="team-title">
-                    <h5>Martin Smith</h5>
-                    <span>founder &amp; ceo</span>
-                </div>*@
+                        <h5>Martin Smith</h5>
+                        <span>founder &amp; ceo</span>
+                    </div>*@
             </div>
         }
-
     </div>
-
 </div>
-
 

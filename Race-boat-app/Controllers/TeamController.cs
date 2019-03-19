@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Race_boat_app.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace Race_boat_app.Controllers
 {
@@ -26,6 +27,37 @@ namespace Race_boat_app.Controllers
             }
             
             return View("Teams", users);
+        }
+
+        public async Task<IActionResult> CreateTeam()
+        {
+            string captainID1 = HttpContext.Session.GetString("_ID");
+            Team temp = new Team()
+            {
+                CaptainID = captainID1,
+                PitID = "null",
+                Recruiting = "true"
+            };
+            await CreateTeamAsync(temp);
+            List<Team> teams = await GetTeamsAsync("https://localhost:44389/api/1.0/team");
+            List<User> users = new List<User>();
+            foreach (var user in teams)
+            {
+                User usr = await GetUserAsync("https://localhost:44389/api/1.0/user/" + user.CaptainID);
+                users.Add(usr);
+            }
+
+            return View("Teams", users);
+        }
+
+        static async Task<Uri> CreateTeamAsync(Team team)
+        {
+            HttpResponseMessage response = await client.PostAsJsonAsync(
+                "https://localhost:44389/api/1.0/team", team);
+            response.EnsureSuccessStatusCode();
+            var tempURL = response.Headers.Location;
+            Console.WriteLine(tempURL);
+            return response.Headers.Location;
         }
 
         static async Task<List<Team>> GetTeamsAsync(string path)
