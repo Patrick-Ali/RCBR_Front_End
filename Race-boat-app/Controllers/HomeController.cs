@@ -70,23 +70,35 @@ namespace Race_boat_app.Controllers
 
         public IActionResult Logout()
         {
-            HttpContext.Session.SetString("_LoggedIn", "false");
-            HttpContext.Session.SetString("_Name", "Empty");
+            try
+            {
+                HttpContext.Session.SetString("_LoggedIn", "false");
+                HttpContext.Session.SetString("_Name", "Empty");
 
-            HttpContext.Session.SetString("_ID", "Empty");
-            HttpContext.Session.SetString("_Email", "Empty");
+                HttpContext.Session.SetString("_ID", "Empty");
+                HttpContext.Session.SetString("_Email", "Empty");
 
-            HttpContext.Session.SetString("_LastName", "Empty");
-            HttpContext.Session.SetString("_Address", "Empty");
-            HttpContext.Session.SetString("_PostCode", "Empty");
-            HttpContext.Session.SetString("_City", "Empty");
-            HttpContext.Session.SetString("_DOB", "Empty");
-            HttpContext.Session.SetString("_Team", "Empty");
-            HttpContext.Session.SetString("_Points", "Empty");
-            HttpContext.Session.SetString("_PhoneNumber", "Empty");
-            HttpContext.Session.SetString("_MobileNumber", "Empty");
-            HttpContext.Session.SetString("_Posistion", "Empty");
-            return View("Index");
+                HttpContext.Session.SetString("_LastName", "Empty");
+                HttpContext.Session.SetString("_Address", "Empty");
+                HttpContext.Session.SetString("_PostCode", "Empty");
+                HttpContext.Session.SetString("_City", "Empty");
+                HttpContext.Session.SetString("_DOB", "Empty");
+                HttpContext.Session.SetString("_Team", "Empty");
+                HttpContext.Session.SetString("_Points", "Empty");
+                HttpContext.Session.SetString("_PhoneNumber", "Empty");
+                HttpContext.Session.SetString("_MobileNumber", "Empty");
+                HttpContext.Session.SetString("_Posistion", "Empty");
+                return View("Index");
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
+            }
         }
 
         public IActionResult AdminLogout() {

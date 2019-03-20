@@ -80,3 +80,4 @@ C:\Users\patri\Downloads\Full_racing_code-master\Race-boat-app\Race-boat-app\obj
 C:\Users\patri\Downloads\Full_racing_code-master\Race-boat-app\Race-boat-app\obj\Debug\netcoreapp2.2\Razor\Views\Event\upload.g.cshtml.cs
 C:\Users\patri\Downloads\Full_racing_code-master\Race-boat-app\Race-boat-app\obj\Debug\netcoreapp2.2\Razor\Views\Home\UserLoginFail.g.cshtml.cs
 C:\Users\patri\Downloads\Full_racing_code-master\Race-boat-app\Race-boat-app\obj\Debug\netcoreapp2.2\Razor\Views\Home\AdminLoginError.g.cshtml.cs
+C:\Users\patri\Downloads\Full_racing_code-master\Race-boat-app\Race-boat-app\obj\Debug\netcoreapp2.2\Razor\Views\Team\TeamView.g.cshtml.cs

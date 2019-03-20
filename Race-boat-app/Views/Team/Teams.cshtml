@@ -26,36 +26,45 @@
                     <div class="team-img">
                         <img src="https://image.freepik.com/free-photo/man-standing-with-a-black-t-shirt_1187-1045.jpg" alt="team member" class="img-responsive">
                     </div>
-                    <div class="team-hover">
-                        <div class="desk">
+                    <div class="team-hover" style=" word-break: break-word; margin-bottom: 3em; text-align: center;">
+                        
                             <h4>Captain @users[i].FirstName</h4>
                             <p>Email: @users[i].Email</p>
                             <p>Phone: @users[i].MobilePhoneNumber</p>
                             <p>Points: @users[i].Points</p>
                             @if (Context.Session.GetString("_LoggedIn") == "true" && Context.Session.GetString("_Team") == users[i].Team)
                             {
-                                <p>Your Team</p>  
+                                <p>Your Team</p>
                             }
-                        </div>
-                        @if (Context.Session.GetString("_LoggedIn") == "true" && Context.Session.GetString("_Team") == "null" && recruiting[i] == "true"
-                            && Context.Session.GetString("_Posistion") == "Pit")
-                        {
-                            <div class="s-link">
+                    </div>
+                    <div class="s-link">
+                            @if (Context.Session.GetString("_LoggedIn") == "true" && Context.Session.GetString("_Team") == "null" && recruiting[i] == "true"
+                             && Context.Session.GetString("_Posistion") == "Pit")
+                            {
+
                                 <form action="@Url.Action("JoinTeam", "Team")">
                                     <input value=@users[i].Team type="hidden" asp-for="TeamID" />
                                     <input value=@users[i].Id type="hidden" asp-for="Joiner" />
                                     <button type="submit" class="btn btn-success btn-sm float-left">Join Team</button>
                                 </form>
-                            </div>
-                        }
+                            
+                             }
+                            <form action="@Url.Action("DisplayTeam", "Team")">
+                                <input value=@users[i].Team type="hidden" asp-for="TeamID" />
+                                <input value=@users[i].Id type="hidden" asp-for="Joiner" />
+                                <button type="submit" class="btn btn-success btn-sm float-left">View Team</button>
+                            </form>
+                            
 
                     </div>
+
                 </div>
+            </div>
                 @*<div class="team-title">
                     <h5>Martin Smith</h5>
                     <span>founder &amp; ceo</span>
                 </div>*@
-            </div>
+            
         }
 
     </div>

@@ -1,0 +1,74 @@
+﻿
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "TeamView";
+    var captain = ViewData["Captain"] as User;
+    var hasBoat = ViewData["hasBoat"] as string;
+    var boat = new Boat();
+    if (hasBoat == "true")
+    {
+        boat = ViewData["Boat"] as Boat;
+    }
+    var hasPit = ViewData["hasPit"] as string;
+    var pit = new User();
+    if (hasPit == "true")
+    {
+        pit = ViewData["Pit"] as User;
+    }
+}
+
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <!-- form card login -->
+                    <div class="card rounded-0">
+                        <div class="card-header">
+                        </div>
+                        <div class="card-body">
+                            <h4>Captain @captain.FirstName</h4>
+                            <p>Email: @captain.Email</p>
+                            <p>Phone: @captain.MobilePhoneNumber</p>
+                            <p>Points: @captain.Points</p>
+                            @if (hasBoat == "true")
+                            {
+                                <h4>Boat</h4>
+                                <p>@boat.Beam</p>
+                                <p>@boat.Type</p>
+                                <p>@boat.DriveSystem</p>
+                                <p>@boat.HullHeight</p>
+                                <p>@boat.HullMaterial</p>
+                                <p>@boat.Length</p>
+                                <p>@boat.MotorSize</p>
+                                <p>@boat.PropellerSize</p>
+                                <p>@boat.Radio</p>
+                                <p>@boat.Scale</p>
+                                <p>@boat.Speed</p>
+                                <p>@boat.SpeedControl</p>
+                                <p>@boat.Steering</p>
+                                <p>@boat.Coluors</p>
+                                <p>@boat.Weight</p>
+                                <p>@boat.SpeedControl</p>
+                            }
+                            @if (hasPit == "true")
+                            {
+                                <h4>Pit @pit.FirstName</h4>
+                                <p>Email: @pit.Email</p>
+                                <p>Phone: @pit.MobilePhoneNumber</p>
+                                <p>Points: @pit.Points</p>
+                            }
+                        </div>
+                        <!--/card-block-->
+                    </div>
+                    <!-- /form card login -->
+                </div>
+            </div>
+            <!--/row-->
+        </div>
+        <!--/col-->
+    </div>
+    <!--/row-->
+</div>
+<!--/container-->

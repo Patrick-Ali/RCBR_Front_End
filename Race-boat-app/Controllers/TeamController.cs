@@ -131,7 +131,46 @@ namespace Race_boat_app.Controllers
             }
         }
 
-       async Task<User> UpdateUser() {
+        public async Task<IActionResult> DisplayTeam(Join join)
+        {
+            var url = "https://localhost:44389/api/1.0/team/" + join.TeamID;
+            Team team = await GetTeamAsync(url.ToString());
+            var url2 = "https://localhost:44389/api/1.0/user/" + team.CaptainID;
+            User captain = await GetUserAsync(url2.ToString());
+            captain = DecryptUser(captain);
+            ViewData["Captain"] = captain;
+            List<Boat> boats = await GetBoatsAsync("https://localhost:44389/api/1.0/boat");
+            Boat boatSend = null;
+            foreach (Boat boat in boats)
+            {
+                if (boat.CaptainID == team.CaptainID)
+                {
+                    boatSend = boat;
+                    ViewData["Boat"] = boat;
+                }
+            }
+            string hasBoat = "true";
+            ViewData["hasBoat"] = hasBoat;
+            if (boatSend == null)
+            {
+                hasBoat = "false";
+                ViewData["hasBoat"] = hasBoat;
+            }
+            string hasPit = "false";
+            ViewData["hasPit"] = hasPit;
+            if (team.PitID != "null")
+            {
+                var url3 = "https://localhost:44389/api/1.0/user/" + team.PitID;
+                User pit = await GetUserAsync(url3.ToString());
+                pit = DecryptUser(pit);
+                hasPit = "true";
+                ViewData["hasPit"] = hasPit;
+                ViewData["Pit"] = pit;
+            }
+            return View("TeamView");
+        }
+
+            async Task<User> UpdateUser() {
             User user = new User();
             user.FirstName = HttpContext.Session.GetString("_Name");
 
@@ -174,6 +213,21 @@ namespace Race_boat_app.Controllers
 
 
         }
+
+
+
+        static async Task<List<Boat>> GetBoatsAsync(string path)
+        {
+            List<Boat> boat = null;
+            HttpResponseMessage response = await client.GetAsync(path);
+            if (response.IsSuccessStatusCode)
+            {
+                boat = await response.Content.ReadAsAsync<List<Boat>>();
+            }
+            return boat;
+        }
+
+
 
         static async Task<Team> UpdateTeamAsync(Team team)
         {
