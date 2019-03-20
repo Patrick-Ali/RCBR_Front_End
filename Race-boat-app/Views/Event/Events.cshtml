@@ -100,7 +100,16 @@
 
                     </form>
                 }
-                <button type="button" class="btn btn-primary" onclick="RegisterEvent()">Register</button>
+                @if (Context.Session.GetString("_Admin") == "true")
+                {
+                    <form method="post" action="@Url.Action("EditEvent", "Event")">
+
+                        <input id="eventSID3" value="" type="hidden" asp-for="Id" />
+                        <input type="submit" class="btn btn-success btn-sm float-left" id="EditButton" name="" value="Edit" />
+
+                    </form>
+                }
+                
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
 

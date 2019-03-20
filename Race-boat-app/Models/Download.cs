@@ -8,7 +8,8 @@ namespace Race_boat_app.Models
     public class Download
     {
         public string Id { get; set; }
+
         public string TeamId { get; set; }
-        
+
     }
 }

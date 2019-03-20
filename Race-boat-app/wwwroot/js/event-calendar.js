@@ -59,6 +59,7 @@
             $('#eventDesc').html(calEvent.description);
             $('#eventSID1').val(calEvent.id);
             $('#eventSID2').val(calEvent.id);
+            $('#eventSID3').val(calEvent.id);
             //$('#RegButton').val(calEvent.id);
             $('#RegButton').attr('name', calEvent.id);
             $('#calendarModal').modal();

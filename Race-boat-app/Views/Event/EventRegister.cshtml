@@ -30,7 +30,7 @@
         maxDayS = maxDay.ToString();
     }
 }
-<h1>Register</h1>
+
 <div class="container py-5">
     <div class="row">
         <div class="col-md-12">
@@ -39,11 +39,12 @@
                     <!-- form card login -->
                     <div class="card rounded-0">
                         <div class="card-header">
-                            <h3 class="mb-0">Login</h3>
+                            <h3 class="mb-0">Event Register</h3>
                         </div>
                         <div class="card-body">
                             @if (Context.Session.GetString("_Admin") == "true")
                             {
+
                                 <form class="form" method="post" action="@Url.Action("EventRegister", "Event")">
                                     VideoURL: <input class="form-control form-control-lg rounded-0" value="Null" asp-for="VideoURL" required />
                                     Name: <input class="form-control form-control-lg rounded-0" asp-for="Name" required />
@@ -54,12 +55,13 @@
                                     Description: <input class="form-control form-control-lg rounded-0" asp-for="Description" required />
                                     <button type="submit" class="btn btn-success btn-lg float-right" id="submitAll">Submit</button>
                                 </form>
+
                             }
-                            @if (Context.Session.GetString("_Admin") == "true")
+                            @if (Context.Session.GetString("_Admin") == "false")
                             {
                                 <p>You Don't have permision to access this</p>
                             }
-                         </div>
+                        </div>
                         <!--/card-block-->
                     </div>
                     <!-- /form card login -->

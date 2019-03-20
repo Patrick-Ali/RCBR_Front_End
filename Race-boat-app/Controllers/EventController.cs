@@ -101,7 +101,7 @@ namespace Race_boat_app.Controllers
         public async Task<ActionResult> EventRegister(EventIn events)
         {//This must be an async task 
             HttpContext.Session.SetString("_VideoURL", events.VideoURL);
-            HttpContext.Session.SetString("_Name", events.Name);
+            HttpContext.Session.SetString("_EventName", events.Name);
             HttpContext.Session.SetString("_Date", events.Date);
             HttpContext.Session.SetString("_Location", events.Location);
             HttpContext.Session.SetString("_TimeStart", events.TimeStart);
@@ -109,6 +109,93 @@ namespace Race_boat_app.Controllers
             HttpContext.Session.SetString("_Description", events.Description);
             return View("upload");
         }
+
+        [HttpPost]
+        public async Task<ActionResult> EditEvent(Download download)
+        {
+            var url = "https://localhost:44389/api/1.0/event/" + download.Id;
+            EventIn event1 = await GetEventAsync(url.ToString());
+            HttpContext.Session.SetString("_VideoURL", "Null");
+            HttpContext.Session.SetString("_EventName", event1.Name);
+            HttpContext.Session.SetString("_Date", event1.Date);
+            HttpContext.Session.SetString("_Location", event1.Location);
+            HttpContext.Session.SetString("_TimeStart", event1.TimeStart);
+            HttpContext.Session.SetString("_TimeEnd", event1.TimeEnd);
+            HttpContext.Session.SetString("_Description", "Null");
+            HttpContext.Session.SetString("_EventID", event1.Id);
+            return View("EventUpdate");
+        }
+
+        public async Task<ActionResult> EventUpdater(EventIn events)
+        {//This must be an async task 
+            List<EventReg> eventRegs = await GetEventRegsAsync("https://localhost:44389/api/1.0/eventReg");
+            ViewData["eventRegs"] = eventRegs;
+            EventIn event1 = await GetEventAsync("https://localhost:44389/api/1.0/event/" + HttpContext.Session.GetString("_EventID"));
+            EventIn temp = new EventIn()
+            {
+                Name = events.Name,
+                Location = events.Location,
+                Date = events.Date,
+                TimeStart = events.TimeStart,
+                TimeEnd = events.TimeEnd,
+                Description = events.Description,
+                VideoURL = events.VideoURL,
+                EventFile = event1.EventFile,
+                Id = event1.Id
+            };
+            var url = await UpdateEventAsync(temp);
+            return View("Events");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UploadNewFile()
+        {
+            try
+            {
+                List<EventReg> eventRegs = await GetEventRegsAsync("https://localhost:44389/api/1.0/eventReg");
+                ViewData["eventRegs"] = eventRegs;
+                //var test = Request.Form.Files;
+                foreach (var upload in Request.Form.Files)
+                {
+                    //if (test[0].FileName != "")
+                    //{
+
+                    // read file to stream
+                    Stream hold = upload.OpenReadStream();
+                    byte[] array = new byte[hold.Length];
+                    hold.Seek(0, SeekOrigin.Begin);
+                    hold.Read(array, 0, array.Length);
+                    EventIn temp = new EventIn()
+                    {
+                        VideoURL = HttpContext.Session.GetString("_VideoURL"),
+                        Name = HttpContext.Session.GetString("_EventName"),
+                        Location = HttpContext.Session.GetString("_Location"),
+                        Date = HttpContext.Session.GetString("_Date"),
+                        TimeStart = HttpContext.Session.GetString("_TimeStart"),
+                        TimeEnd = HttpContext.Session.GetString("_TimeEnd"),
+                        Description = HttpContext.Session.GetString("_Description"),
+                        Id = HttpContext.Session.GetString("_EventID"),
+                        EventFile = array
+                    };
+                    await UpdateEventAsync(temp);
+                    hold.Close();
+                    return View("Events");
+
+                    //}
+                }
+                return View("Events");
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
+            }
+        }
+
 
         [HttpPost]
         public async Task<ActionResult> Upload()
@@ -131,7 +218,7 @@ namespace Race_boat_app.Controllers
                     EventIn temp = new EventIn()
                     {
                         VideoURL = HttpContext.Session.GetString("_VideoURL"),
-                        Name = HttpContext.Session.GetString("_Name"),
+                        Name = HttpContext.Session.GetString("_EventName"),
                         Location = HttpContext.Session.GetString("_Location"),
                         Date = HttpContext.Session.GetString("_Date"),
                         TimeStart = HttpContext.Session.GetString("_TimeStart"),
@@ -219,6 +306,17 @@ namespace Race_boat_app.Controllers
                 return File(stream.GetBuffer(), "application/pdf", filename);
             }
 
+        }
+
+        static async Task<EventIn> UpdateEventAsync(EventIn eventIn)
+        {
+            HttpResponseMessage response = await client.PutAsJsonAsync(
+                $"https://localhost:44389/api/1.0/event/{ eventIn.Id}", eventIn);
+            response.EnsureSuccessStatusCode();
+
+            // Deserialize the updated product from the response body.
+            eventIn = await response.Content.ReadAsAsync<EventIn>();
+            return eventIn;
         }
 
         static async Task<Uri> CreateEventRegAsync(EventReg eventReg)
