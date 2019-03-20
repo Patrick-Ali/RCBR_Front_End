@@ -23,26 +23,38 @@ namespace Race_boat_app.Controllers
 
         public async Task<IActionResult> ViewBoat()
         {
-            if (holding == "")
+            try
             {
-                string captainID = HttpContext.Session.GetString("_ID");
-                List<Boat> boats = await GetBoatsAsync("https://localhost:44389/api/1.0/boat");
-                foreach (Boat boatIn in boats)
+                if (holding == "")
                 {
-                    if (boatIn.CaptainID == captainID)
+                    string captainID = HttpContext.Session.GetString("_ID");
+                    List<Boat> boats = await GetBoatsAsync("https://localhost:44389/api/1.0/boat");
+                    foreach (Boat boatIn in boats)
                     {
-                        holding = boatIn.Id;
-                        return View("Boat", boatIn);
+                        if (boatIn.CaptainID == captainID)
+                        {
+                            holding = boatIn.Id;
+                            return View("Boat", boatIn);
+                        }
                     }
                 }
+                else
+                {
+                    var url = "https://localhost:44389/api/1.0/boat/" + holding;
+                    Boat boat = await GetBoatAsync(url.ToString());
+                    return View("Boat", boat);
+                }
+                return View("BoatRegister");
             }
-            else
+            catch (Exception e)
             {
-                var url = "https://localhost:44389/api/1.0/boat/" + holding;
-                Boat boat = await GetBoatAsync(url.ToString());
-                return View("Boat", boat);
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
             }
-            return View("BoatRegister");
         }
 
         [HttpPost]
@@ -63,6 +75,11 @@ namespace Race_boat_app.Controllers
             }
             catch (Exception e)
             {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
                 return View("Error");
             }
         }
@@ -84,6 +101,11 @@ namespace Race_boat_app.Controllers
             }
             catch (Exception e)
             {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
                 return View("Error");
             }
         }

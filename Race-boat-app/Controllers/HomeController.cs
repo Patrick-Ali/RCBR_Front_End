@@ -14,12 +14,34 @@ namespace Race_boat_app.Controllers
     {
         static HttpClient client = new HttpClient();
         private static readonly string passPhrase = "l%HJb5N^O@fl0K02H9PsxlR9algJTzK7ARBjJsd3fPG0&GwkrU";
-        private static readonly string passPhrase2 = "yUVyb$shjp4*%S6G!fx5t%i!fTZ@b8KQ#ymQyfhgNQ$#mKB0vA";
+        //private static readonly string passPhrase2 = "yUVyb$shjp4*%S6G!fx5t%i!fTZ@b8KQ#ymQyfhgNQ$#mKB0vA";
 
         public IActionResult Index()
         {
-            HttpContext.Session.SetString("_LoggedIn", "false");
-            return View();
+            try
+            {
+                if (HttpContext.Session.GetString("_LoggedIn") == "true")
+                {
+                    HttpContext.Session.SetString("_Error", "false");
+                    return View();
+                }
+                else
+                {
+                    HttpContext.Session.SetString("_Error", "false");
+                    HttpContext.Session.SetString("_LoggedIn", "false");
+                    return View();
+                }
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "false");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                HttpContext.Session.SetString("_LoggedIn", "false");
+                return View();
+            }
         }
 
         public IActionResult Login()
@@ -29,7 +51,7 @@ namespace Race_boat_app.Controllers
 
         public IActionResult AdminLogin()
         {
-            return View();
+            return View("AdminLogin");
         }
 
         public IActionResult Logout()
@@ -56,56 +78,68 @@ namespace Race_boat_app.Controllers
         [HttpPost]
         public async Task<ActionResult> LoginUser(Login login)
         {
-            string sendEmail = Crypto.Encrypt(login.Email, passPhrase);
-            string sendPassword = Crypto.Encrypt(login.Password, passPhrase);
-            Login logSend = new Login()
+            try
             {
-                Email = sendEmail,
-                Password = sendPassword
-            };
+                string sendEmail = Crypto.Encrypt(login.Email, passPhrase);
+                string sendPassword = Crypto.Encrypt(login.Password, passPhrase);
+                Login logSend = new Login()
+                {
+                    Email = sendEmail,
+                    Password = sendPassword
+                };
 
-            HttpResponseMessage response = await client.PostAsJsonAsync(
-                "https://localhost:44389/api/1.0/login", logSend);
-            response.EnsureSuccessStatusCode();
-            var tempURL = response.Headers.Location;
-            Console.WriteLine(tempURL);
-            User tempUser = await GetUserAsync(tempURL.ToString());
-            string id = tempUser.Id;
-            string email = Crypto.Decrypt(tempUser.Email, passPhrase);
-            string firstname = Crypto.Decrypt(tempUser.FirstName, passPhrase);
-            string lastname = Crypto.Decrypt(tempUser.LastName, passPhrase);
-            string address = Crypto.Decrypt(tempUser.Address, passPhrase);
-            string city = Crypto.Decrypt(tempUser.City, passPhrase);
-            string dob = Crypto.Decrypt(tempUser.DOB, passPhrase);
-            string postCode = Crypto.Decrypt(tempUser.PostCode, passPhrase);
-            string team = Crypto.Decrypt(tempUser.Team, passPhrase);
-            string points = Crypto.Decrypt(tempUser.Points, passPhrase);
-            string phoneNumber = Crypto.Decrypt(tempUser.PhoneNumber, passPhrase);
-            string mobileNumber = Crypto.Decrypt(tempUser.MobilePhoneNumber, passPhrase);
-            string posistion = Crypto.Decrypt(tempUser.Posistion, passPhrase);
-            string password = Crypto.Decrypt(tempUser.Password, passPhrase);
-            OutLogin final = new OutLogin()
+                HttpResponseMessage response = await client.PostAsJsonAsync(
+                    "https://localhost:44389/api/1.0/login", logSend);
+                response.EnsureSuccessStatusCode();
+                var tempURL = response.Headers.Location;
+                Console.WriteLine(tempURL);
+                User tempUser = await GetUserAsync(tempURL.ToString());
+                string id = tempUser.Id;
+                string email = Crypto.Decrypt(tempUser.Email, passPhrase);
+                string firstname = Crypto.Decrypt(tempUser.FirstName, passPhrase);
+                string lastname = Crypto.Decrypt(tempUser.LastName, passPhrase);
+                string address = Crypto.Decrypt(tempUser.Address, passPhrase);
+                string city = Crypto.Decrypt(tempUser.City, passPhrase);
+                string dob = Crypto.Decrypt(tempUser.DOB, passPhrase);
+                string postCode = Crypto.Decrypt(tempUser.PostCode, passPhrase);
+                string team = Crypto.Decrypt(tempUser.Team, passPhrase);
+                string points = Crypto.Decrypt(tempUser.Points, passPhrase);
+                string phoneNumber = Crypto.Decrypt(tempUser.PhoneNumber, passPhrase);
+                string mobileNumber = Crypto.Decrypt(tempUser.MobilePhoneNumber, passPhrase);
+                string posistion = Crypto.Decrypt(tempUser.Posistion, passPhrase);
+                string password = Crypto.Decrypt(tempUser.Password, passPhrase);
+                OutLogin final = new OutLogin()
+                {
+                    Email = email,
+                    Id = id
+                };
+                HttpContext.Session.SetString("_Name", firstname);
+                HttpContext.Session.SetString("_ID", id);
+                HttpContext.Session.SetString("_Email", email);
+                HttpContext.Session.SetString("_LoggedIn", "true");
+                HttpContext.Session.SetString("_LastName", lastname);
+                HttpContext.Session.SetString("_Address", address);
+                HttpContext.Session.SetString("_PostCode", postCode);
+                HttpContext.Session.SetString("_City", city);
+                HttpContext.Session.SetString("_DOB", dob);
+                HttpContext.Session.SetString("_Team", team);
+                HttpContext.Session.SetString("_Points", points);
+                HttpContext.Session.SetString("_PhoneNumber", phoneNumber);
+                HttpContext.Session.SetString("_MobileNumber", mobileNumber);
+                HttpContext.Session.SetString("_Posistion", posistion);
+                HttpContext.Session.SetString("_Password", password);
+                return View("Index");
+                //OutLogin temp = response.Content.ReadAsAsync<OutLogin>();
+            }
+            catch (Exception e)
             {
-                Email = email,
-                Id = id
-            };
-            HttpContext.Session.SetString("_Name", firstname);
-            HttpContext.Session.SetString("_ID", id);
-            HttpContext.Session.SetString("_Email", email);
-            HttpContext.Session.SetString("_LoggedIn", "true");
-            HttpContext.Session.SetString("_LastName", lastname);
-            HttpContext.Session.SetString("_Address", address);
-            HttpContext.Session.SetString("_PostCode", postCode);
-            HttpContext.Session.SetString("_City", city);
-            HttpContext.Session.SetString("_DOB", dob);
-            HttpContext.Session.SetString("_Team", team);
-            HttpContext.Session.SetString("_Points", points);
-            HttpContext.Session.SetString("_PhoneNumber", phoneNumber);
-            HttpContext.Session.SetString("_MobileNumber", mobileNumber);
-            HttpContext.Session.SetString("_Posistion", posistion);
-            HttpContext.Session.SetString("_Password", password);
-            return View("Index");
-            //OutLogin temp = response.Content.ReadAsAsync<OutLogin>();
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("UserLoginFail");
+            }
 
         }
 
@@ -125,30 +159,42 @@ namespace Race_boat_app.Controllers
         [HttpPost]
         public async Task<ActionResult> AdminLogin(Login login)
         {
-            string sendEmail = Crypto.Encrypt(login.Email, passPhrase);
-            string sendPassword = Crypto.Encrypt(login.Password, passPhrase);
-            Login logSend = new Login()
+            try
             {
-                Email = sendEmail,
-                Password = sendPassword
-            };
+                string sendEmail = Crypto.Encrypt(login.Email, passPhrase);
+                string sendPassword = Crypto.Encrypt(login.Password, passPhrase);
+                Login logSend = new Login()
+                {
+                    Email = sendEmail,
+                    Password = sendPassword
+                };
 
-            HttpResponseMessage response = await client.PostAsJsonAsync(
-                "https://localhost:44389/api/1.0/adminlogin", logSend);
-            Console.Write(response.IsSuccessStatusCode);
-            response.EnsureSuccessStatusCode();
-            var tempURL = response.Headers.Location;
+                HttpResponseMessage response = await client.PostAsJsonAsync(
+                    "https://localhost:44389/api/1.0/adminlogin", logSend);
+                Console.Write(response.IsSuccessStatusCode);
+                response.EnsureSuccessStatusCode();
+                var tempURL = response.Headers.Location;
 
-            Console.WriteLine(tempURL);
-            Admin tempAdmin = await GetAdminAsync(tempURL.ToString());
-            string id = tempAdmin.Id;
-            string email = Crypto.Decrypt(tempAdmin.Email, passPhrase);
-            OutLogin final = new OutLogin()
+                Console.WriteLine(tempURL);
+                Admin tempAdmin = await GetAdminAsync(tempURL.ToString());
+                string id = tempAdmin.Id;
+                string email = Crypto.Decrypt(tempAdmin.Email, passPhrase);
+                OutLogin final = new OutLogin()
+                {
+                    Email = email,
+                    Id = id
+                };
+                return View("Index");
+            }
+            catch (Exception e)
             {
-                Email = email,
-                Id = id
-            };
-            return View("Index");
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("AdminLoginError");
+            }
             //OutLogin temp = response.Content.ReadAsAsync<OutLogin>();
 
         }

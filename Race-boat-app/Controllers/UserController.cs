@@ -19,8 +19,25 @@ namespace Race_boat_app.Controllers
 
         public async Task<IActionResult> All()
         {
-            List<User> users = await GetUsersAsync("https://localhost:44389/api/1.0/user");
-            return View("Users", users);
+            try
+            {
+                List<User> users = await GetUsersAsync("https://localhost:44389/api/1.0/user");
+                List<User> usrs = new List<User>();
+                foreach (User user in users) {
+                    User usr = DecryptUser(user);
+                    usrs.Add(usr);
+                }
+                return View("Users", usrs);
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
+            }
             //return View("User");
         }
 
@@ -92,6 +109,11 @@ namespace Race_boat_app.Controllers
             }
             catch (Exception e)
             {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
                 return View("Error");
             }
         }
@@ -99,56 +121,62 @@ namespace Race_boat_app.Controllers
         [HttpPost]
         public async Task<ActionResult> RegisterUser(User user)
         {
-            try { 
-            if (ModelState.IsValid)
-            {
-                User crypto = new User();
-                crypto.FirstName = Crypto.Encrypt(user.FirstName, passPhrase);
-                crypto.Posistion = Crypto.Encrypt(user.Posistion, passPhrase);
-                crypto.Address = Crypto.Encrypt(user.Address, passPhrase);
-                crypto.City = Crypto.Encrypt(user.City, passPhrase);
-                crypto.DOB = Crypto.Encrypt(user.DOB, passPhrase);
-                crypto.Email = Crypto.Encrypt(user.Email, passPhrase);
-                crypto.LastName = Crypto.Encrypt(user.LastName, passPhrase);
-                crypto.PostCode = Crypto.Encrypt(user.PostCode, passPhrase);
-                crypto.Password = Crypto.Encrypt(user.Password, passPhrase);
-                crypto.Team = Crypto.Encrypt(user.Team, passPhrase);
-                crypto.Points = Crypto.Encrypt(user.Points, passPhrase);
-                crypto.PhoneNumber = Crypto.Encrypt(user.PhoneNumber, passPhrase);
-                crypto.MobilePhoneNumber = Crypto.Encrypt(user.MobilePhoneNumber, passPhrase);
-                var url = await CreateUserAsync(crypto);
-                User encUser = await GetUserAsync(url.ToString());
-                //string points = DecryptPoints(encUser);
-                User decUser = DecryptUser(encUser);
-                //decUser.Points = DecryptPoints(decUser.Points);
+            try
+            { 
+                if (ModelState.IsValid)
+                {
+                    User crypto = new User();
+                    crypto.FirstName = Crypto.Encrypt(user.FirstName, passPhrase);
+                    crypto.Posistion = Crypto.Encrypt(user.Posistion, passPhrase);
+                    crypto.Address = Crypto.Encrypt(user.Address, passPhrase);
+                    crypto.City = Crypto.Encrypt(user.City, passPhrase);
+                    crypto.DOB = Crypto.Encrypt(user.DOB, passPhrase);
+                    crypto.Email = Crypto.Encrypt(user.Email, passPhrase);
+                    crypto.LastName = Crypto.Encrypt(user.LastName, passPhrase);
+                    crypto.PostCode = Crypto.Encrypt(user.PostCode, passPhrase);
+                    crypto.Password = Crypto.Encrypt(user.Password, passPhrase);
+                    crypto.Team = Crypto.Encrypt(user.Team, passPhrase);
+                    crypto.Points = Crypto.Encrypt(user.Points, passPhrase);
+                    crypto.PhoneNumber = Crypto.Encrypt(user.PhoneNumber, passPhrase);
+                    crypto.MobilePhoneNumber = Crypto.Encrypt(user.MobilePhoneNumber, passPhrase);
+                    var url = await CreateUserAsync(crypto);
+                    User encUser = await GetUserAsync(url.ToString());
+                    //string points = DecryptPoints(encUser);
+                    User decUser = DecryptUser(encUser);
+                    //decUser.Points = DecryptPoints(decUser.Points);
 
 
-                //HttpContext.Session.Set("User", Encoding.UTF8.GetBytes(decUser.FirstName));
-                HttpContext.Session.SetString("_LoggedIn", "true");
-                HttpContext.Session.SetString("_Name", decUser.FirstName);
+                    //HttpContext.Session.Set("User", Encoding.UTF8.GetBytes(decUser.FirstName));
+                    HttpContext.Session.SetString("_LoggedIn", "true");
+                    HttpContext.Session.SetString("_Name", decUser.FirstName);
 
-                HttpContext.Session.SetString("_ID", decUser.Id);
-                HttpContext.Session.SetString("_Email", decUser.Email);
+                    HttpContext.Session.SetString("_ID", decUser.Id);
+                    HttpContext.Session.SetString("_Email", decUser.Email);
 
-                HttpContext.Session.SetString("_LastName", decUser.LastName);
-                HttpContext.Session.SetString("_Address", decUser.Address);
-                HttpContext.Session.SetString("_PostCode", decUser.PostCode);
-                HttpContext.Session.SetString("_City", decUser.City);
-                HttpContext.Session.SetString("_DOB", decUser.DOB);
-                HttpContext.Session.SetString("_Team", decUser.Team);
-                HttpContext.Session.SetString("_Points", decUser.Points);
-                HttpContext.Session.SetString("_PhoneNumber", decUser.PhoneNumber);
-                HttpContext.Session.SetString("_MobileNumber", decUser.MobilePhoneNumber);
-                HttpContext.Session.SetString("_Posistion", decUser.Posistion);
-                HttpContext.Session.SetString("_Password", decUser.Password);
+                    HttpContext.Session.SetString("_LastName", decUser.LastName);
+                    HttpContext.Session.SetString("_Address", decUser.Address);
+                    HttpContext.Session.SetString("_PostCode", decUser.PostCode);
+                    HttpContext.Session.SetString("_City", decUser.City);
+                    HttpContext.Session.SetString("_DOB", decUser.DOB);
+                    HttpContext.Session.SetString("_Team", decUser.Team);
+                    HttpContext.Session.SetString("_Points", decUser.Points);
+                    HttpContext.Session.SetString("_PhoneNumber", decUser.PhoneNumber);
+                    HttpContext.Session.SetString("_MobileNumber", decUser.MobilePhoneNumber);
+                    HttpContext.Session.SetString("_Posistion", decUser.Posistion);
+                    HttpContext.Session.SetString("_Password", decUser.Password);
 
-                return View("profile", decUser);
-            }
+                    return View("profile", decUser);
+                }
 
-            return View("profile");
+                return View("profile");
             }
             catch(Exception e)
             {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
                 return View("Error");
             }
         }

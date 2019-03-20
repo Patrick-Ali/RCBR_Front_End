@@ -18,82 +18,117 @@ namespace Race_boat_app.Controllers
 
         public async Task<IActionResult> All()
         {
-            List<Team> teams = await GetTeamsAsync("https://localhost:44389/api/1.0/team");
-            List<User> users = new List<User>();
-            foreach(var user in teams)
+            try
             {
-                User usr = await GetUserAsync("https://localhost:44389/api/1.0/user/" + user.CaptainID);
-                usr = DecryptUser(usr);
-                users.Add(usr);
+                List<Team> teams = await GetTeamsAsync("https://localhost:44389/api/1.0/team");
+                List<User> users = new List<User>();
+                foreach (var user in teams)
+                {
+                    User usr = await GetUserAsync("https://localhost:44389/api/1.0/user/" + user.CaptainID);
+                    usr = DecryptUser(usr);
+                    users.Add(usr);
+                }
+                List<string> recruiting = new List<string>();
+                foreach (var rec in teams)
+                {
+                    recruiting.Add(rec.Recruiting);
+                }
+                ViewData["recruiting"] = recruiting;
+                ViewData["users"] = users;
+                return View("Teams");
             }
-            List<string> recruiting = new List<string>();
-            foreach (var rec in teams)
+            catch (Exception e)
             {
-                recruiting.Add(rec.Recruiting);
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
             }
-            ViewData["recruiting"] = recruiting;
-            ViewData["users"] = users;
-            return View("Teams");
         }
 
         public async Task<IActionResult> JoinTeam(Join join) {
             //var hold = Request.Form["Team"];
             //var id = Request.Form["ID"];
-
-            var url = "https://localhost:44389/api/1.0/team/" + join.TeamID;
-            Team team = await GetTeamAsync(url.ToString());
-            team.PitID = HttpContext.Session.GetString("_ID");
-            team.Recruiting = "false";
-            await UpdateTeamAsync(team);
-            HttpContext.Session.SetString("_Team", team.Id);
-            User user1 = await UpdateUser();
-            List <Team> teams = await GetTeamsAsync("https://localhost:44389/api/1.0/team");
-            List<User> users = new List<User>();
-            List<string> recruiting = new List<string>();
-            foreach (var user in teams)
+            try
             {
-                User usr = await GetUserAsync("https://localhost:44389/api/1.0/user/" + user.CaptainID);
-                usr = DecryptUser(usr);
-                users.Add(usr);
+                var url = "https://localhost:44389/api/1.0/team/" + join.TeamID;
+                Team team = await GetTeamAsync(url.ToString());
+                team.PitID = HttpContext.Session.GetString("_ID");
+                team.Recruiting = "false";
+                await UpdateTeamAsync(team);
+                HttpContext.Session.SetString("_Team", team.Id);
+                User user1 = await UpdateUser();
+                List<Team> teams = await GetTeamsAsync("https://localhost:44389/api/1.0/team");
+                List<User> users = new List<User>();
+                List<string> recruiting = new List<string>();
+                foreach (var user in teams)
+                {
+                    User usr = await GetUserAsync("https://localhost:44389/api/1.0/user/" + user.CaptainID);
+                    usr = DecryptUser(usr);
+                    users.Add(usr);
+                }
+                foreach (var rec in teams)
+                {
+                    recruiting.Add(rec.Recruiting);
+                }
+                ViewData["recruiting"] = recruiting;
+                ViewData["users"] = users;
+                return View("Teams");
             }
-            foreach (var rec in teams)
+            catch (Exception e)
             {
-                recruiting.Add(rec.Recruiting);
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
             }
-            ViewData["recruiting"] = recruiting;
-            ViewData["users"] = users;
-            return View("Teams");
         }
 
         public async Task<IActionResult> CreateTeam()
         {
-            string captainID1 = HttpContext.Session.GetString("_ID");
-            Team temp = new Team()
+            try
             {
-                CaptainID = captainID1,
-                PitID = "null",
-                Recruiting = "true"
-            };
-            var url = await CreateTeamAsync(temp);
-            Team team = await GetTeamAsync(url.ToString());
-            HttpContext.Session.SetString("_Team", team.Id);
-            User user1 = await UpdateUser();
-            List<Team> teams = await GetTeamsAsync("https://localhost:44389/api/1.0/team");
-            List<User> users = new List<User>();
-            foreach (var user in teams)
-            {
-                User usr = await GetUserAsync("https://localhost:44389/api/1.0/user/" + user.CaptainID);
-                usr = DecryptUser(usr);
-                users.Add(usr);
+                string captainID1 = HttpContext.Session.GetString("_ID");
+                Team temp = new Team()
+                {
+                    CaptainID = captainID1,
+                    PitID = "null",
+                    Recruiting = "true"
+                };
+                var url = await CreateTeamAsync(temp);
+                Team team = await GetTeamAsync(url.ToString());
+                HttpContext.Session.SetString("_Team", team.Id);
+                User user1 = await UpdateUser();
+                List<Team> teams = await GetTeamsAsync("https://localhost:44389/api/1.0/team");
+                List<User> users = new List<User>();
+                foreach (var user in teams)
+                {
+                    User usr = await GetUserAsync("https://localhost:44389/api/1.0/user/" + user.CaptainID);
+                    usr = DecryptUser(usr);
+                    users.Add(usr);
+                }
+                List<string> recruiting = new List<string>();
+                foreach (var rec in teams)
+                {
+                    recruiting.Add(rec.Recruiting);
+                }
+                ViewData["recruiting"] = recruiting;
+                ViewData["users"] = users;
+                return View("Teams");
             }
-            List<string> recruiting = new List<string>();
-            foreach (var rec in teams)
+            catch (Exception e)
             {
-                recruiting.Add(rec.Recruiting);
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
             }
-            ViewData["recruiting"] = recruiting;
-            ViewData["users"] = users;
-            return View("Teams");
         }
 
        async Task<User> UpdateUser() {

@@ -41,13 +41,13 @@
                         </div>
                         <div class="card-body">
                             <form class="form" method="post" action="@Url.Action("EventRegister", "Event")">
-                                VideoURL: <input class="form-control form-control-lg rounded-0" value="Null" asp-for="VideoURL" />
-                                Name: <input class="form-control form-control-lg rounded-0" asp-for="Name" />
-                                Date: <input class="form-control form-control-lg rounded-0" type="date" max="2022-01-01" min="@maxDate-@maxMonthS-@maxDayS" asp-for="Date" />
-                                Location: <input class="form-control form-control-lg rounded-0" asp-for="Location" />
-                                Time Start: <input class="form-control form-control-lg rounded-0" asp-for="TimeStart" />
-                                Time End: <input class="form-control form-control-lg rounded-0" asp-for="TimeEnd" />
-                                Description: <input class="form-control form-control-lg rounded-0" asp-for="Description" />
+                                VideoURL: <input class="form-control form-control-lg rounded-0" value="Null" asp-for="VideoURL" required/>
+                                Name: <input class="form-control form-control-lg rounded-0" asp-for="Name" required/>
+                                Date: <input class="form-control form-control-lg rounded-0" type="date" max="2022-01-01" min="@maxDate-@maxMonthS-@maxDayS" asp-for="Date" required/>
+                                Location: <input class="form-control form-control-lg rounded-0" asp-for="Location" required/>
+                                Time Start: <input class="form-control form-control-lg rounded-0" asp-for="TimeStart" required/>
+                                Time End: <input class="form-control form-control-lg rounded-0" asp-for="TimeEnd" required/>
+                                Description: <input class="form-control form-control-lg rounded-0" asp-for="Description" required/>
                                 <button type="submit" class="btn btn-success btn-lg float-right" id="submitAll">Submit</button>
                             </form>
                         </div>

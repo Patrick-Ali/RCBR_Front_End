@@ -16,9 +16,21 @@ namespace Race_boat_app.Controllers
 
         public async Task<IActionResult> All()
         {
-            List<EventReg> eventRegs = await GetEventRegsAsync("https://localhost:44389/api/1.0/eventReg");
-            ViewData["eventRegs"] = eventRegs;
-            return View("Events");
+            try
+            {
+                List<EventReg> eventRegs = await GetEventRegsAsync("https://localhost:44389/api/1.0/eventReg");
+                ViewData["eventRegs"] = eventRegs;
+                return View("Events");
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
+            }
         }
 
         public IActionResult RegisterEvent()
@@ -29,31 +41,55 @@ namespace Race_boat_app.Controllers
         [HttpPost]
         public async Task<IActionResult> ViewEvent(String id)
         {
-            EventIn event1 = await GetEventAsync("https://localhost:44389/api/1.0/event/"+id);
-            return RedirectToAction("EventRegister", event1);
+            try
+            {
+                EventIn event1 = await GetEventAsync("https://localhost:44389/api/1.0/event/" + id);
+                return RedirectToAction("EventRegister", event1);
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> RegisterTeam(Download download)
         {
-            List<EventReg> eventRegs = await GetEventRegsAsync("https://localhost:44389/api/1.0/eventReg");
-            ViewData["eventRegs"] = eventRegs;
-            foreach (var reg in eventRegs)
+            try
             {
-                if (reg.EventID == download.Id && reg.TeamID == download.TeamId)
+                List<EventReg> eventRegs = await GetEventRegsAsync("https://localhost:44389/api/1.0/eventReg");
+                ViewData["eventRegs"] = eventRegs;
+                foreach (var reg in eventRegs)
                 {
+                    if (reg.EventID == download.Id && reg.TeamID == download.TeamId)
+                    {
 
-                    return View("Events");
+                        return View("Events");
+                    }
                 }
+                EventReg tempReg = new EventReg()
+                {
+                    EventID = download.Id,
+                    TeamID = download.TeamId
+                };
+                var url = await CreateEventRegAsync(tempReg);
+                RedirectToAction("All");
+                return View("Events");
             }
-            EventReg tempReg = new EventReg()
+            catch (Exception e)
             {
-                EventID = download.Id,
-                TeamID = download.TeamId
-            };
-            var url = await CreateEventRegAsync(tempReg);
-            RedirectToAction("All");
-            return View("Events");
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
+            }
         }
 
         /*public async Task<IActionResult> GetDownload(Download download) {
@@ -77,13 +113,15 @@ namespace Race_boat_app.Controllers
         [HttpPost]
         public async Task<ActionResult> Upload()
         {
-            List<EventReg> eventRegs = await GetEventRegsAsync("https://localhost:44389/api/1.0/eventReg");
-            ViewData["eventRegs"] = eventRegs;
-            //var test = Request.Form.Files;
-            foreach (var upload in Request.Form.Files)
+            try
             {
-                //if (test[0].FileName != "")
-                //{
+                List<EventReg> eventRegs = await GetEventRegsAsync("https://localhost:44389/api/1.0/eventReg");
+                ViewData["eventRegs"] = eventRegs;
+                //var test = Request.Form.Files;
+                foreach (var upload in Request.Form.Files)
+                {
+                    //if (test[0].FileName != "")
+                    //{
 
                     // read file to stream
                     Stream hold = upload.OpenReadStream();
@@ -105,19 +143,31 @@ namespace Race_boat_app.Controllers
                     hold.Close();
                     return View("Events");
 
-                //}
+                    //}
+                }
+                return View("Events");
             }
-            return View("Events");
+            catch (Exception e)
+            {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
+            }
         }
 
         static async Task<Uri> CreateEventAsync(EventIn eventIn)
         {
-            HttpResponseMessage response = await client.PostAsJsonAsync(
-                "https://localhost:44389/api/1.0/event", eventIn);
-            response.EnsureSuccessStatusCode();
-            var tempURL = response.Headers.Location;
-            Console.WriteLine(tempURL);
-            return response.Headers.Location;
+        
+                HttpResponseMessage response = await client.PostAsJsonAsync(
+                    "https://localhost:44389/api/1.0/event", eventIn);
+                response.EnsureSuccessStatusCode();
+                var tempURL = response.Headers.Location;
+                Console.WriteLine(tempURL);
+                return response.Headers.Location;
+      
         }
 
         //[HttpGet("{id:length(24)}")]
@@ -130,6 +180,7 @@ namespace Race_boat_app.Controllers
 
         public async Task<List<EventIn>> AllEvents()
         {
+
             List<EventIn> events = await GetEventsAsync("https://localhost:44389/api/1.0/event");
             return events;
         }
