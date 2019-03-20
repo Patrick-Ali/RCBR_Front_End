@@ -20,13 +20,27 @@ namespace Race_boat_app.Controllers
         {
             try
             {
+
                 if (HttpContext.Session.GetString("_LoggedIn") == "true")
                 {
+                    if (HttpContext.Session.GetString("_Admin") == "true")
+                    {
+                        HttpContext.Session.SetString("_Error", "false");
+                        return View();
+                    }
+                    HttpContext.Session.SetString("_Admin", "false");
                     HttpContext.Session.SetString("_Error", "false");
                     return View();
                 }
                 else
                 {
+                    if (HttpContext.Session.GetString("_Admin") == "true")
+                    {
+                        HttpContext.Session.SetString("_Error", "false");
+                        HttpContext.Session.SetString("_LoggedIn", "false");
+                        return View();
+                    }
+                    HttpContext.Session.SetString("_Admin", "false");
                     HttpContext.Session.SetString("_Error", "false");
                     HttpContext.Session.SetString("_LoggedIn", "false");
                     return View();
@@ -72,6 +86,11 @@ namespace Race_boat_app.Controllers
             HttpContext.Session.SetString("_PhoneNumber", "Empty");
             HttpContext.Session.SetString("_MobileNumber", "Empty");
             HttpContext.Session.SetString("_Posistion", "Empty");
+            return View("Index");
+        }
+
+        public IActionResult AdminLogout() {
+            HttpContext.Session.SetString("_Admin", "false");
             return View("Index");
         }
 
@@ -184,6 +203,7 @@ namespace Race_boat_app.Controllers
                     Email = email,
                     Id = id
                 };
+                HttpContext.Session.SetString("_Admin", "true");
                 return View("Index");
             }
             catch (Exception e)
