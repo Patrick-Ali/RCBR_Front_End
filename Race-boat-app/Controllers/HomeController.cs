@@ -58,6 +58,41 @@ namespace Race_boat_app.Controllers
             }
         }
 
+        public ActionResult About()
+        {
+            ViewBag.Message = "Your application description page.";
+
+            return View();
+        }
+
+        public ActionResult Contact()
+        {
+            ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
+
+        public ActionResult Privacy()
+        {
+            ViewBag.Message = "Your privacy page.";
+
+            return View();
+        }
+
+        public ActionResult Cookies()
+        {
+            ViewBag.Message = "Your cookie page.";
+
+            return View();
+        }
+
+        public ActionResult Terms()
+        {
+            ViewBag.Message = "Your Terms page.";
+
+            return View();
+        }
+
         public IActionResult Login()
         {
             return View("UserLogin");

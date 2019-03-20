@@ -100,51 +100,87 @@ namespace Race_boat_app.Controllers
 
         public async Task<ActionResult> EventRegister(EventIn events)
         {//This must be an async task 
-            HttpContext.Session.SetString("_VideoURL", events.VideoURL);
-            HttpContext.Session.SetString("_EventName", events.Name);
-            HttpContext.Session.SetString("_Date", events.Date);
-            HttpContext.Session.SetString("_Location", events.Location);
-            HttpContext.Session.SetString("_TimeStart", events.TimeStart);
-            HttpContext.Session.SetString("_TimeEnd", events.TimeEnd);
-            HttpContext.Session.SetString("_Description", events.Description);
-            return View("upload");
+            try
+            {
+                HttpContext.Session.SetString("_VideoURL", events.VideoURL);
+                HttpContext.Session.SetString("_EventName", events.Name);
+                HttpContext.Session.SetString("_Date", events.Date);
+                HttpContext.Session.SetString("_Location", events.Location);
+                HttpContext.Session.SetString("_TimeStart", events.TimeStart);
+                HttpContext.Session.SetString("_TimeEnd", events.TimeEnd);
+                HttpContext.Session.SetString("_Description", events.Description);
+                return View("upload");
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult> EditEvent(Download download)
         {
-            var url = "https://localhost:44389/api/1.0/event/" + download.Id;
-            EventIn event1 = await GetEventAsync(url.ToString());
-            HttpContext.Session.SetString("_VideoURL", "Null");
-            HttpContext.Session.SetString("_EventName", event1.Name);
-            HttpContext.Session.SetString("_Date", event1.Date);
-            HttpContext.Session.SetString("_Location", event1.Location);
-            HttpContext.Session.SetString("_TimeStart", event1.TimeStart);
-            HttpContext.Session.SetString("_TimeEnd", event1.TimeEnd);
-            HttpContext.Session.SetString("_Description", "Null");
-            HttpContext.Session.SetString("_EventID", event1.Id);
-            return View("EventUpdate");
+            try
+            { 
+                var url = "https://localhost:44389/api/1.0/event/" + download.Id;
+                EventIn event1 = await GetEventAsync(url.ToString());
+                HttpContext.Session.SetString("_VideoURL", "Null");
+                HttpContext.Session.SetString("_EventName", event1.Name);
+                HttpContext.Session.SetString("_Date", event1.Date);
+                HttpContext.Session.SetString("_Location", event1.Location);
+                HttpContext.Session.SetString("_TimeStart", event1.TimeStart);
+                HttpContext.Session.SetString("_TimeEnd", event1.TimeEnd);
+                HttpContext.Session.SetString("_Description", "Null");
+                HttpContext.Session.SetString("_EventID", event1.Id);
+                return View("EventUpdate");
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
+            }
         }
 
         public async Task<ActionResult> EventUpdater(EventIn events)
         {//This must be an async task 
-            List<EventReg> eventRegs = await GetEventRegsAsync("https://localhost:44389/api/1.0/eventReg");
-            ViewData["eventRegs"] = eventRegs;
-            EventIn event1 = await GetEventAsync("https://localhost:44389/api/1.0/event/" + HttpContext.Session.GetString("_EventID"));
-            EventIn temp = new EventIn()
+            try
+            { 
+                List<EventReg> eventRegs = await GetEventRegsAsync("https://localhost:44389/api/1.0/eventReg");
+                ViewData["eventRegs"] = eventRegs;
+                EventIn event1 = await GetEventAsync("https://localhost:44389/api/1.0/event/" + HttpContext.Session.GetString("_EventID"));
+                EventIn temp = new EventIn()
+                {
+                    Name = events.Name,
+                    Location = events.Location,
+                    Date = events.Date,
+                    TimeStart = events.TimeStart,
+                    TimeEnd = events.TimeEnd,
+                    Description = events.Description,
+                    VideoURL = events.VideoURL,
+                    EventFile = event1.EventFile,
+                    Id = event1.Id
+                };
+                var url = await UpdateEventAsync(temp);
+                return View("Events");
+            }
+            catch (Exception e)
             {
-                Name = events.Name,
-                Location = events.Location,
-                Date = events.Date,
-                TimeStart = events.TimeStart,
-                TimeEnd = events.TimeEnd,
-                Description = events.Description,
-                VideoURL = events.VideoURL,
-                EventFile = event1.EventFile,
-                Id = event1.Id
-            };
-            var url = await UpdateEventAsync(temp);
-            return View("Events");
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
+            }
         }
 
         [HttpPost]

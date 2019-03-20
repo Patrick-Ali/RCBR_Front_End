@@ -24,29 +24,17 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg sticky-top navbar-light">
-        <a class="navbar-brand" asp-page="/Index">BoatRacer</a>
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index">BoatRacer</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Event" asp-action="All">Event</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Team" asp-action="All">Team</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Faq">Faq</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
@@ -127,15 +115,19 @@
         <hr />
         <footer class="footer-distributed">
             <div class="footer-left">
-                <h3>Boat<span>Rodeo</span></h3>
+                <h3>Boat<span>Racer</span></h3>
                 <p class="footer-links">
-                    <a asp-page="/Index">Home</a>
+                    <a asp-controller="Home" asp-action="Index">Home</a>
                     ·
-                    <a href="#">Faq</a>
+                    <a asp-controller="Home" asp-action="Contact">Contact</a>
                     .
-                    <a asp-page="/About">About</a>
+                    <a asp-controller="Home" asp-action="About">About</a>
                     ·
-                    <a asp-page="/Contact">Contact</a>
+                    <a asp-controller="Home" asp-action="Terms">Terms</a>
+                    ·
+                    <a asp-controller="Home" asp-action="Cookies">Cookies</a>
+                    ·
+                    <a asp-controller="Home" asp-action="Privacy">Privacy</a>
                 </p>
                 <p class="footer-company-name">BoatRacer &copy; 2019</p>
             </div>
