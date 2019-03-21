@@ -158,13 +158,13 @@ namespace Race_boat_app.Controllers
             }
         }
         /// <summary>
-        /// Handels communicating with the API to create a boat
+        /// Handels communicating with the API to create a Boat.
         /// </summary>
         /// <param name="boat">
-        /// An object containing the information to be passed to the API
+        /// An object containing the information to be passed to the API.
         /// </param>
         /// <returns>
-        /// Returns the location in the API of the newly created boat 
+        /// Returns the location in the API of the newly created boat. 
         /// </returns>
         static async Task<Uri> CreateBoatAsync(Boat boat)
         {
@@ -177,13 +177,13 @@ namespace Race_boat_app.Controllers
         }
 
         /// <summary>
-        /// Handels communicating with the API to get a specific Boat
+        /// Handels communicating with the API to get a specific Boat.
         /// </summary>
         /// <param name="path">
-        /// The location of the boat that should be retrieved
+        /// The location of the boat that should be retrieved.
         /// </param>
         /// <returns>
-        /// Returns the boat that was retrieved from the API
+        /// Returns the boat that was retrieved from the API.
         /// </returns>
         static async Task<Boat> GetBoatAsync(string path)
         {
