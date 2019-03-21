@@ -86,3 +86,4 @@ C:\Users\patri\Downloads\Full_racing_code-master\Race-boat-app\Race-boat-app\obj
 C:\Users\patri\Downloads\Full_racing_code-master\Race-boat-app\Race-boat-app\obj\Debug\netcoreapp2.2\Razor\Views\Home\Contact.g.cshtml.cs
 C:\Users\patri\Downloads\Full_racing_code-master\Race-boat-app\Race-boat-app\obj\Debug\netcoreapp2.2\Razor\Views\Home\Terms.g.cshtml.cs
 C:\Users\patri\Downloads\Full_racing_code-master\Race-boat-app\Race-boat-app\obj\Debug\netcoreapp2.2\Razor\Views\Home\Cookies.g.cshtml.cs
+C:\Users\patri\Downloads\Full_racing_code-master\Race-boat-app\Race-boat-app\bin\Debug\netcoreapp2.2\Race-boat-app.xml
