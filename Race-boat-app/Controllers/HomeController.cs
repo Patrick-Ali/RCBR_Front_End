@@ -31,7 +31,7 @@ namespace Race_boat_app.Controllers
         {
             try
             {
-
+                HttpContext.Session.SetString("_BoatID", "Empty");
                 if (HttpContext.Session.GetString("_LoggedIn") == "true")
                 {
                     if (HttpContext.Session.GetString("_Admin") == "true")
@@ -210,7 +210,8 @@ namespace Race_boat_app.Controllers
         public IActionResult Login()
         {
             try
-            { 
+            {
+                HttpContext.Session.SetString("_BoatID", "Empty");
                 if (HttpContext.Session.GetString("_LoggedIn") == "true")
                 {
                     return RedirectToAction("Index");
@@ -240,6 +241,7 @@ namespace Race_boat_app.Controllers
         {
             try
             {
+                HttpContext.Session.SetString("_BoatID", "Empty");
                 if (HttpContext.Session.GetString("_Admin") == "true")
                 {
                     return RedirectToAction("Index");

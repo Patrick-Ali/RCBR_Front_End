@@ -54,7 +54,7 @@ namespace Race_boat_app.Controllers
                     {
                         if (boatIn.CaptainID == captainID)
                         {
-                            holding = boatIn.Id;
+                            //holding = boatIn.Id;
                             return View("Boat", boatIn);
                         }
                     }
@@ -100,7 +100,7 @@ namespace Race_boat_app.Controllers
                     var url = await CreateBoatAsync(boat);
                     Boat boatTemp = await GetBoatAsync(url.ToString());
                     HttpContext.Session.SetString("_BoatID", boatTemp.Id);
-                    holding = HttpContext.Session.GetString("_BoatID");
+                    //holding = HttpContext.Session.GetString("_BoatID");
                     //redirecttoaction(viewboat)
                     //return View("Boat", boatTemp);
                     return RedirectToAction("ViewBoat");
@@ -137,7 +137,20 @@ namespace Race_boat_app.Controllers
             {
                 if (ModelState.IsValid)
                 {
+
                     boat.CaptainID = HttpContext.Session.GetString("_ID");
+                    List<Boat> boats = await GetBoatsAsync("https://localhost:44389/api/1.0/boat");
+                    //Boat boatTemp = new Boat();
+                    foreach (Boat boating in boats)
+                    {
+                        if (boating.CaptainID == boat.CaptainID)
+                        {
+                            boat.Id = boating.Id;
+                        }
+                    }
+                    //Boat boatTemp = await GetBoatAsync(url.ToString());
+                    //HttpContext.Session.SetString("_BoatID", boatTemp.Id);
+                    //holding = HttpContext.Session.GetString("_BoatID");
                     await UpdateBoatAsync(boat);
                     var url = "https://localhost:44389/api/1.0/boat/" + boat.Id;
                     Boat boatTemp = await GetBoatAsync(url.ToString());
@@ -228,11 +241,11 @@ namespace Race_boat_app.Controllers
         /// </returns>
         static async Task<HttpStatusCode> UpdateBoatAsync(Boat boat)
         {
-            boat.Id = holding;
+            //boat.Id = holding;
             HttpResponseMessage response = await client.PutAsJsonAsync(
                 $"https://localhost:44389/api/1.0/boat/{ boat.Id}", boat);
             response.EnsureSuccessStatusCode();
-
+            holding = "";
             // Deserialize the updated product from the response body.
             //boat = await response.Content.ReadAsAsync<Boat>();
             return response.StatusCode;

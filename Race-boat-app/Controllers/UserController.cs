@@ -22,6 +22,16 @@ namespace Race_boat_app.Controllers
         private static readonly string passPhrase = "l%HJb5N^O@fl0K02H9PsxlR9algJTzK7ARBjJsd3fPG0&GwkrU";
         private static readonly string passPhrase2 = "yUVyb$shjp4*%S6G!fx5t%i!fTZ@b8KQ#ymQyfhgNQ$#mKB0vA";
 
+        /// <summary>
+        /// Gathers all users from the API and sends them to the users
+        /// view page to display a list of all users registered with
+        /// the API.
+        /// </summary>
+        /// <returns>
+        /// Attempts to return the users view displaying all users
+        /// registered with the API.
+        /// Should anything go wrong it will send the user to the Error page.
+        /// </returns>
         public async Task<IActionResult> All()
         {
             try
@@ -46,17 +56,85 @@ namespace Race_boat_app.Controllers
             //return View("User");
         }
 
+        /// <summary>
+        /// When the user makes a reuest to register 
+        /// this method will be triggered and
+        /// display the registration form.
+        /// </summary>
+        /// <returns>
+        /// Returns the user registration form.
+        /// If the user is logged in it will
+        /// redirect them to the index page.
+        /// Should anything go wrong it will send 
+        /// the user to the Error page.
+        /// </returns>
         public IActionResult Register()
         {
-            return View("Register");
+            try
+            {
+                if (HttpContext.Session.GetString("_LoggedIn") == "false")
+                {
+                    return View("Register");
+                }
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
+            }
         }
 
+        /// <summary>
+        /// When the user makes a reuest to view their 
+        /// profile this method will be triggered and
+        /// display the users profile page if they are logged
+        /// in.
+        /// </summary>
+        /// <returns>
+        /// Returns the user profile page.
+        /// If not logged in it will redirect to
+        /// the home page.
+        /// Should anything go wrong it will send the 
+        /// user to the Error page.
+        /// </returns>
         public IActionResult Profile()
         {
-            return View("profile");
+            try
+            {
+                if (HttpContext.Session.GetString("_LoggedIn") == "true")
+                { 
+                    return View("profile");
+                }
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
+            }
         }
 
-
+        /// <summary>
+        /// When the user requests an update to their profile
+        /// this action is triggered which will pass the
+        /// data onto the API.
+        /// </summary>
+        /// <param name="user">
+        /// The object contains the updated information to
+        /// be passed onto the API.
+        /// </param>
+        /// <returns>
+        /// 
+        /// </returns>
         [HttpPost]
         public async Task<ActionResult> UpdateUser(User user)
         {
@@ -68,6 +146,7 @@ namespace Race_boat_app.Controllers
                     user.Email = HttpContext.Session.GetString("_Email");
                     user.Points = HttpContext.Session.GetString("_Points");
                     user.Team = HttpContext.Session.GetString("_Team");
+                    user.Posistion = HttpContext.Session.GetString("_Posistion");
                     User crypto = new User();
                     crypto.FirstName = Crypto.Encrypt(user.FirstName, passPhrase);
                     crypto.Posistion = Crypto.Encrypt(user.Posistion, passPhrase);
@@ -107,10 +186,11 @@ namespace Race_boat_app.Controllers
                     HttpContext.Session.SetString("_MobileNumber", decUser.MobilePhoneNumber);
                     HttpContext.Session.SetString("_Posistion", decUser.Posistion);
 
-                    return View("profile", decUser);
+                    //return View("profile", decUser);
+                    return RedirectToAction("Profile");
                 }
-
-                return View("profile");
+                return RedirectToAction("Profile");
+                //return View("profile");
             }
             catch (Exception e)
             {
@@ -123,6 +203,18 @@ namespace Race_boat_app.Controllers
             }
         }
 
+        /// <summary>
+        /// This action handels the users request to register
+        /// it will pass the given information onto the
+        /// API for storage.
+        /// </summary>
+        /// <param name="user">
+        /// The object containing the information to be passed to the
+        /// API.
+        /// </param>
+        /// <returns>
+        /// 
+        /// </returns>
         [HttpPost]
         public async Task<ActionResult> RegisterUser(User user)
         {
@@ -170,10 +262,10 @@ namespace Race_boat_app.Controllers
                     HttpContext.Session.SetString("_Posistion", decUser.Posistion);
                     HttpContext.Session.SetString("_Password", decUser.Password);
 
-                    return View("profile", decUser);
+                    return RedirectToAction("Profile");
                 }
 
-                return View("profile");
+                return RedirectToAction("Profile");
             }
             catch(Exception e)
             {
@@ -186,11 +278,21 @@ namespace Race_boat_app.Controllers
             }
         }
 
-        static string DecryptPoints(string points) {
+        /*static string DecryptPoints(string points) {
             string point2 = Crypto.Decrypt(points, passPhrase2);
             return point2;
-        }
+        }*/
 
+        /// <summary>
+        /// This method handels decrypting a user so the required information
+        /// can be displayed. 
+        /// </summary>
+        /// <param name="user">
+        /// The user information that needs to be decrypted.
+        /// </param>
+        /// <returns>
+        /// A decrypted user.
+        /// </returns>
         static User DecryptUser(User user) {
             user.Address = Crypto.Decrypt(user.Address, passPhrase);
             user.City = Crypto.Decrypt(user.City, passPhrase);
@@ -208,6 +310,16 @@ namespace Race_boat_app.Controllers
             return user;
         }
 
+        /// <summary>
+        /// Handels communicating with the API to update the information of 
+        /// a specific user
+        /// </summary>
+        /// <param name="user">
+        /// An object containing the information to be passed to the API
+        /// </param>
+        /// <returns>
+        /// Will return the status code of the APIs response, should be 420 No Content  
+        /// </returns>
         static async Task<User> UpdateUserAsync(User user)
         {
             HttpResponseMessage response = await client.PutAsJsonAsync(
@@ -219,6 +331,15 @@ namespace Race_boat_app.Controllers
             return user;
         }
 
+        /// <summary>
+        /// Handels communicating with the API to get a specific User.
+        /// </summary>
+        /// <param name="path">
+        /// The location of the user that should be retrieved.
+        /// </param>
+        /// <returns>
+        /// Returns the user that was retrieved from the API.
+        /// </returns>
         static async Task<User> GetUserAsync(string path)
         {
             User user = null;
@@ -230,6 +351,15 @@ namespace Race_boat_app.Controllers
             return user;
         }
 
+        /// <summary>
+        /// Handels communicating with the API to create a User.
+        /// </summary>
+        /// <param name="crypto">
+        /// An object containing the encrypted information to be passed to the API.
+        /// </param>
+        /// <returns>
+        /// Returns the location in the API of the newly created User. 
+        /// </returns>
         static async Task<Uri> CreateUserAsync(User crypto)
         {
             HttpResponseMessage response = await client.PostAsJsonAsync(
@@ -244,9 +374,18 @@ namespace Race_boat_app.Controllers
 
         //public async Task<IActionResult> UserAll()
         //{
-            
+
         //}
 
+        /// <summary>
+        /// Handels communicating with the API to retrieve all users currently stored in the database
+        /// </summary>
+        /// <param name="path">
+        /// The location of the users that should be retrieved
+        /// </param>
+        /// <returns>
+        /// Returns all the users that were retrieved from the API
+        /// </returns>
         static async Task<List<User>> GetUsersAsync(string path)
         {
             List<User> users = null;
