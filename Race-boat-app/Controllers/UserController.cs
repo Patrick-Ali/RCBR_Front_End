@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Session;
 using Microsoft.AspNetCore.Http;
 using System.Text;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,10 @@ using Race_boat_app.Models;
 
 namespace Race_boat_app.Controllers
 {
+    /// <summary>
+    /// Controller manages user requests in regards to users
+    /// and gathers information from the API regarding users.
+    /// </summary>
     public class UserController : Controller
     {
         static HttpClient client = new HttpClient();
