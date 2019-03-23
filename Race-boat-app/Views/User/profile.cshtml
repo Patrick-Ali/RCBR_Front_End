@@ -39,7 +39,7 @@
                             <h3 class="mb-0">@Context.Session.GetString("_Name")'s Profile</h3>
                         </div>
                         <div class="card-body">
-                            <form class="form" method="post" action="@Url.Action("Register", "User")">
+                            <form class="form" method="post" action="@Url.Action("UpdateUser", "User")">
                                 ID: <input class="form-control form-control-lg rounded-0" disabled value=@Context.Session.GetString("_ID") required />
                                 FirstName: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_Name") asp-for="FirstName" required />
                                 LastName: <input class="form-control form-control-lg rounded-0" value=@Context.Session.GetString("_LastName") asp-for="LastName" required />
@@ -76,7 +76,7 @@
                             </form>
                             @if (@Context.Session.GetString("_Posistion") == "Captain")
                             {
-                                <form action="@Url.Action("ViewBoat", "Boat")">
+                                <form action="@Url.Action("Register", "Boat")">
                                     <button type="submit" class="btn btn-success btn-lg float-left">View Boat</button>
                                 </form>
                             }

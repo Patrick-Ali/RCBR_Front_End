@@ -7,8 +7,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Race_boat_app.Views.User
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class profileModel : PageModel
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public void OnGet()
         {
         }

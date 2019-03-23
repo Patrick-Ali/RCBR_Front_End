@@ -754,5 +754,536 @@
             Returns all the users that were retrieved from the API
             </returns>
         </member>
+        <member name="T:Race_boat_app.Models.Admin">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Admin.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Admin.Email">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Admin.Password">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Models.Boat">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Race_boat_app.Models.Boat.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.Beam">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.BeamM">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.Type">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.DriveSystem">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.HullHeight">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.HullHeightM">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.HullMaterial">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.Length">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.LengthM">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.MotorSize">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.PropellerSize">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.Radio">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.Scale">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.ScaleM">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.Speed">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.SpeedM">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.SpeedControl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.Steering">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.Coluors">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.Weight">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.WeightM">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Boat.CaptainID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Models.Crypto">
+            <summary>
+            This class handels performing encryption and
+            decryption operations for the Front End
+            </summary>
+        </member>
+        <member name="M:Race_boat_app.Models.Crypto.Encrypt(System.String,System.String)">
+            <summary>
+            This action performs the encryption operation on
+            the data being passed to it.
+            </summary>
+            <param name="plainText">
+            The data being passed to be encrypted.
+            </param>
+            <param name="passPhrase">
+            The key that will be used to encrypt the data
+            </param>
+            <returns>
+            It returns an encrypted string of the data passed in.
+            </returns>
+        </member>
+        <member name="M:Race_boat_app.Models.Crypto.Decrypt(System.String,System.String)">
+            <summary>
+            This acrtion handels the decryption of a piece of 
+            data.
+            </summary>
+            <param name="cipherText">
+            The encrypted data to be decrypted
+            </param>
+            <param name="passPhrase">
+            The key that will decrypt the data.
+            </param>
+            <returns>
+            A decrypted version of the data passed in.
+            </returns>
+        </member>
+        <member name="T:Race_boat_app.Models.Download">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Download.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Download.TeamId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Models.ErrorViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.ErrorViewModel.RequestId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.ErrorViewModel.ShowRequestId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Models.Event">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Race_boat_app.Models.Event.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Event.VideoURL">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Event.EventFileID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Event.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Event.Date">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Event.Location">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Event.TimeStart">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Event.TimeEnd">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Event.Description">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Models.EventIn">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.EventIn.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.EventIn.VideoURL">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.EventIn.EventFile">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.EventIn.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.EventIn.Date">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.EventIn.Location">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.EventIn.TimeStart">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.EventIn.TimeEnd">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.EventIn.Description">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Models.EventReg">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Race_boat_app.Models.EventReg.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.EventReg.EventID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.EventReg.TeamID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Models.Join">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Join.TeamID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Join.Joiner">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Models.Login">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Login.Email">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Login.Password">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Models.OutLogin">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.OutLogin.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.OutLogin.Email">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Models.Team">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Race_boat_app.Models.Team.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Team.CaptainID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Team.PitID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.Team.Recruiting">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Models.User">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Race_boat_app.Models.User.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.User.FirstName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.User.LastName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.User.DOB">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.User.Points">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.User.Posistion">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.User.Address">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.User.PostCode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.User.City">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.User.Email">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.User.Password">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.User.PhoneNumber">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.User.MobilePhoneNumber">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Race_boat_app.Models.User.Team">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Views.Boat.BoatModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Race_boat_app.Views.Boat.BoatModel.OnGet">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Views.Boat.BoatRegisterModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Race_boat_app.Views.Boat.BoatRegisterModel.OnGet">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Views.Event.EventRegisterModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Race_boat_app.Views.Event.EventRegisterModel.OnGet">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Views.Event.EventUpdateModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Race_boat_app.Views.Event.EventUpdateModel.OnGet">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Views.Event.uploadModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Race_boat_app.Views.Event.uploadModel.OnGet">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Race_boat_app.Views.User.profileModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Race_boat_app.Views.User.profileModel.OnGet">
+            <summary>
+            
+            </summary>
+        </member>
     </members>
 </doc>
