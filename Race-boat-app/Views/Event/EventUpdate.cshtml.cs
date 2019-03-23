@@ -7,8 +7,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Race_boat_app.Views.Event
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class EventUpdateModel : PageModel
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public void OnGet()
         {
         }

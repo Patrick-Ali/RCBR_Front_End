@@ -15,7 +15,10 @@
             When the user makes the request to add a boat this is called.
             </summary>
             <returns>
-            This function returns the regerstration page for a boat
+            If the user does not have a boattThis function 
+            returns the regerstration page for a boat otherwise
+            it will redirect them to the ViewBoat action.
+            Should anything go wrong it will send the user to the Error page.
             </returns>
         </member>
         <member name="M:Race_boat_app.Controllers.BoatController.ViewBoat">

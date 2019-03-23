@@ -7,8 +7,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Race_boat_app.Views.Boat
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class BoatRegisterModel : PageModel
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public void OnGet()
         {
         }
