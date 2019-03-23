@@ -213,6 +213,33 @@ namespace Race_boat_app.Controllers
                 return View("Error");
             }
         }
+
+        /// <summary>
+        /// Gets all boats the API has to be displayed. 
+        /// </summary>
+        /// <returns>
+        /// Returns the view boats which displays all the boats in the API.
+        /// Should anything go wrong it will send the user to the Error page.
+        /// </returns>
+        public async Task<IActionResult> All()
+        {
+            try
+            {
+                List<Boat> boats = await GetBoatsAsync("https://localhost:44389/api/1.0/boat");
+                return View("Boats", boats);
+            }
+            catch (Exception e)
+            {
+                string message = e.Message;
+                string stackTrace = e.StackTrace;
+                HttpContext.Session.SetString("_Error", "true");
+                HttpContext.Session.SetString("_ErrorMessage", message);
+                HttpContext.Session.SetString("_ErrorTrace", stackTrace);
+                return View("Error");
+            }
+            //return View("User");
+        }
+
         /// <summary>
         /// Handels communicating with the API to create a Boat.
         /// </summary>

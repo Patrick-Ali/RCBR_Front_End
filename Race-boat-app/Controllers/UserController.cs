@@ -415,5 +415,21 @@ namespace Race_boat_app.Controllers
             //}
              return users;
         }
+
+        /// <summary>
+        /// Handels communicating with the API to delete a specific user
+        /// </summary>
+        /// <param name="id">
+        /// The ID of the user that is to be deleted
+        /// </param>
+        /// <returns>
+        /// Will return the status code of the APIs response, should be 420 No Content  
+        /// </returns>
+        static async Task<HttpStatusCode> DeleteUserAsync(string id)
+        {
+            HttpResponseMessage response = await client.DeleteAsync(
+                $"https://localhost:44389/api/1.0/user/{id}");
+            return response.StatusCode;
+        }
     }
 }
