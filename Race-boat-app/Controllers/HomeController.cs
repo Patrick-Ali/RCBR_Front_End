@@ -272,6 +272,7 @@ namespace Race_boat_app.Controllers
         {
             try
             {
+                HttpContext.Session.SetString("_HasBoat", "Empty");
                 HttpContext.Session.SetString("_BoatID", "Empty");
                 HttpContext.Session.SetString("_LoggedIn", "false");
                 HttpContext.Session.SetString("_Name", "Empty");
