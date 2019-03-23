@@ -20,7 +20,7 @@ namespace Race_boat_app.Controllers
     {
         static HttpClient client = new HttpClient();
         private static readonly string passPhrase = "l%HJb5N^O@fl0K02H9PsxlR9algJTzK7ARBjJsd3fPG0&GwkrU";
-        private static readonly string passPhrase2 = "yUVyb$shjp4*%S6G!fx5t%i!fTZ@b8KQ#ymQyfhgNQ$#mKB0vA";
+        //private static readonly string passPhrase2 = "yUVyb$shjp4*%S6G!fx5t%i!fTZ@b8KQ#ymQyfhgNQ$#mKB0vA";
 
         /// <summary>
         /// Gathers all users from the API and sends them to the users
@@ -274,7 +274,7 @@ namespace Race_boat_app.Controllers
                 HttpContext.Session.SetString("_Error", "true");
                 HttpContext.Session.SetString("_ErrorMessage", message);
                 HttpContext.Session.SetString("_ErrorTrace", stackTrace);
-                return View("Error");
+                return View("RegisterFail");
             }
         }
 

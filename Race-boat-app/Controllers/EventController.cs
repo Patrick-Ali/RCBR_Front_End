@@ -384,9 +384,9 @@ namespace Race_boat_app.Controllers
             }
         }
 
-        public IActionResult stopRed() {
+        /*public IActionResult stopRed() {
             return RedirectToAction("All");
-        }
+        }*/
 
         /// <summary>
         /// Handels communicating with the API to create an Event.
