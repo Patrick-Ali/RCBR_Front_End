@@ -183,13 +183,13 @@ namespace Race_boat_app.Controllers
             { 
                 var url = "https://localhost:44389/api/1.0/event/" + download.Id;
                 EventIn event1 = await GetEventAsync(url.ToString());
-                HttpContext.Session.SetString("_VideoURL", "Null");
+                HttpContext.Session.SetString("_VideoURL", event1.VideoURL);
                 HttpContext.Session.SetString("_EventName", event1.Name);
                 HttpContext.Session.SetString("_Date", event1.Date);
                 HttpContext.Session.SetString("_Location", event1.Location);
                 HttpContext.Session.SetString("_TimeStart", event1.TimeStart);
                 HttpContext.Session.SetString("_TimeEnd", event1.TimeEnd);
-                HttpContext.Session.SetString("_Description", "Null");
+                HttpContext.Session.SetString("_Description", event1.Description);
                 HttpContext.Session.SetString("_EventID", event1.Id);
                 return View("EventUpdate");
             }

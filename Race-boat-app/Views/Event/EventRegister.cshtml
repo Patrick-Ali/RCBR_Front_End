@@ -50,8 +50,8 @@
                                     Name: <input class="form-control form-control-lg rounded-0" asp-for="Name" required />
                                     Date: <input class="form-control form-control-lg rounded-0" type="date" max="2022-01-01" min="@maxDate-@maxMonthS-@maxDayS" asp-for="Date" required />
                                     Location: <input class="form-control form-control-lg rounded-0" asp-for="Location" required />
-                                    Time Start: <input class="form-control form-control-lg rounded-0" asp-for="TimeStart" required />
-                                    Time End: <input class="form-control form-control-lg rounded-0" asp-for="TimeEnd" required />
+                                    Time Start: <input id="startTime" type="time" class="form-control form-control-lg rounded-0" asp-for="TimeStart" required />
+                                    Time End: <input id="endTime" type="time" class="form-control form-control-lg rounded-0" asp-for="TimeEnd" required />
                                     Description: <input class="form-control form-control-lg rounded-0" asp-for="Description" required />
                                     <button type="submit" class="btn btn-success btn-lg float-right" id="submitAll">Submit</button>
                                 </form>
@@ -72,4 +72,15 @@
         <!--/col-->
     </div>
     <!--/row-->
+    <script>
+        var startTime = document.getElementById("startTime");
+        var endTime = document.getElementById("endTime");
+
+        startTime.addEventListener("input", function () {
+            endTime.min = startTime.value;
+        }, false);
+        endTime.addEventListener("input", function () {
+            startTime.max = endTime.value;
+        }, false);
+    </script>
 </div>

@@ -31,7 +31,7 @@
                             {
                                 id: data.id,
                                 title: data.name,
-                                description: data.Desc,
+                                description: data.description,
                                 date: data.date,
                                 location: data.location,
                                 startTime: data.timeStart,

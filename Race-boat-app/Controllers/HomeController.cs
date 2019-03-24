@@ -290,6 +290,7 @@ namespace Race_boat_app.Controllers
                 HttpContext.Session.SetString("_PhoneNumber", "Empty");
                 HttpContext.Session.SetString("_MobileNumber", "Empty");
                 HttpContext.Session.SetString("_Posistion", "Empty");
+                HttpContext.Session.Clear();
                 return RedirectToAction("Index");
                 //return View("Index");
             }
@@ -317,6 +318,7 @@ namespace Race_boat_app.Controllers
             try
             { 
                 HttpContext.Session.SetString("_Admin", "false");
+                HttpContext.Session.Clear();
                 return RedirectToAction("Index");
             }
             catch (Exception e)
