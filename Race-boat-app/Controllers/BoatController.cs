@@ -307,7 +307,7 @@ namespace Race_boat_app.Controllers
         /// An object containing the information to be passed to the API
         /// </param>
         /// <returns>
-        /// Will return the status code of the APIs response, should be 420 No Content  
+        /// Will return the status code of the APIs response, should be 204 No Content  
         /// </returns>
         static async Task<HttpStatusCode> UpdateBoatAsync(Boat boat)
         {
@@ -328,7 +328,7 @@ namespace Race_boat_app.Controllers
         /// The ID of the boat that is to be deleted
         /// </param>
         /// <returns>
-        /// Will return the status code of the APIs response, should be 420 No Content  
+        /// Will return the status code of the APIs response, should be 204 No Content  
         /// </returns>
         static async Task<HttpStatusCode> DeleteBoatAsync(string id)
         {

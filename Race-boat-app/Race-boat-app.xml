@@ -111,7 +111,7 @@
             An object containing the information to be passed to the API
             </param>
             <returns>
-            Will return the status code of the APIs response, should be 420 No Content  
+            Will return the status code of the APIs response, should be 204 No Content  
             </returns>
         </member>
         <member name="M:Race_boat_app.Controllers.BoatController.DeleteBoatAsync(System.String)">
@@ -122,7 +122,7 @@
             The ID of the boat that is to be deleted
             </param>
             <returns>
-            Will return the status code of the APIs response, should be 420 No Content  
+            Will return the status code of the APIs response, should be 204 No Content  
             </returns>
         </member>
         <member name="T:Race_boat_app.Controllers.EventController">
@@ -286,7 +286,19 @@
             An object containing the information to be passed to the API
             </param>
             <returns>
-            Will return the status code of the APIs response, should be 420 No Content  
+            Will return the status code of the APIs response, should be 204 No Content  
+            </returns>
+        </member>
+        <member name="M:Race_boat_app.Controllers.EventController.UpdateEventRegAsync(Race_boat_app.Models.EventReg)">
+            <summary>
+            Handels communicating with the API to update the information of 
+            a specific event reg
+            </summary>
+            <param name="eventReg">
+            An object containing the information to be passed to the API
+            </param>
+            <returns>
+            Will return the status code of the APIs response, should be 204 No Content  
             </returns>
         </member>
         <member name="M:Race_boat_app.Controllers.EventController.CreateEventRegAsync(Race_boat_app.Models.EventReg)">
@@ -330,7 +342,7 @@
             The ID of the event that is to be deleted
             </param>
             <returns>
-            Will return the status code of the APIs response, should be 420 No Content  
+            Will return the status code of the APIs response, should be 204 No Content  
             </returns>
         </member>
         <member name="M:Race_boat_app.Controllers.EventController.DeleteEventRegAsync(System.String)">
@@ -341,7 +353,7 @@
             The ID of the event reg that is to be deleted
             </param>
             <returns>
-            Will return the status code of the APIs response, should be 420 No Content  
+            Will return the status code of the APIs response, should be 204 No Content  
             </returns>
         </member>
         <member name="M:Race_boat_app.Controllers.EventController.Error">
@@ -591,7 +603,7 @@
             An object containing the information to be passed to the API
             </param>
             <returns>
-            Will return the status code of the APIs response, should be 420 No Content  
+            Will return the status code of the APIs response, should be 204 No Content  
             </returns>
         </member>
         <member name="M:Race_boat_app.Controllers.TeamController.DecryptUser(Race_boat_app.Models.User)">
@@ -615,7 +627,7 @@
             An object containing the information to be passed to the API
             </param>
             <returns>
-            Will return the status code of the APIs response, should be 420 No Content  
+            Will return the status code of the APIs response, should be 204 No Content  
             </returns>
         </member>
         <member name="M:Race_boat_app.Controllers.TeamController.CreateTeamAsync(Race_boat_app.Models.Team)">
@@ -670,7 +682,7 @@
             The ID of the team that is to be deleted
             </param>
             <returns>
-            Will return the status code of the APIs response, should be 420 No Content  
+            Will return the status code of the APIs response, should be 204 No Content  
             </returns>
         </member>
         <member name="T:Race_boat_app.Controllers.UserController">
@@ -769,7 +781,7 @@
             An object containing the information to be passed to the API
             </param>
             <returns>
-            Will return the status code of the APIs response, should be 420 No Content  
+            Will return the status code of the APIs response, should be 204 No Content  
             </returns>
         </member>
         <member name="M:Race_boat_app.Controllers.UserController.GetUserAsync(System.String)">
@@ -813,7 +825,7 @@
             The ID of the user that is to be deleted
             </param>
             <returns>
-            Will return the status code of the APIs response, should be 420 No Content  
+            Will return the status code of the APIs response, should be 204 No Content  
             </returns>
         </member>
         <member name="T:Race_boat_app.Models.Admin">

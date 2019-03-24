@@ -528,7 +528,7 @@ namespace Race_boat_app.Controllers
         /// An object containing the information to be passed to the API
         /// </param>
         /// <returns>
-        /// Will return the status code of the APIs response, should be 420 No Content  
+        /// Will return the status code of the APIs response, should be 204 No Content  
         /// </returns>
         static async Task<HttpStatusCode> UpdateEventAsync(EventIn eventIn)
         {
@@ -539,6 +539,27 @@ namespace Race_boat_app.Controllers
             // Deserialize the updated product from the response body.
             //eventIn = await response.Content.ReadAsAsync<EventIn>();
             //return eventIn;
+            return response.StatusCode;
+        }
+
+        /// <summary>
+        /// Handels communicating with the API to update the information of 
+        /// a specific event reg
+        /// </summary>
+        /// <param name="eventReg">
+        /// An object containing the information to be passed to the API
+        /// </param>
+        /// <returns>
+        /// Will return the status code of the APIs response, should be 204 No Content  
+        /// </returns>
+        static async Task<HttpStatusCode> UpdateEventRegAsync(EventReg eventReg)
+        {
+            HttpResponseMessage response = await client.PutAsJsonAsync(
+                $"https://localhost:44389/api/1.0/eventReg/{ eventReg.Id}", eventReg);
+            response.EnsureSuccessStatusCode();
+
+            // Deserialize the updated product from the response body.
+            //eventReg = await response.Content.ReadAsAsync<EventReg>();
             return response.StatusCode;
         }
 
@@ -608,7 +629,7 @@ namespace Race_boat_app.Controllers
         /// The ID of the event that is to be deleted
         /// </param>
         /// <returns>
-        /// Will return the status code of the APIs response, should be 420 No Content  
+        /// Will return the status code of the APIs response, should be 204 No Content  
         /// </returns>
         static async Task<HttpStatusCode> DeleteEventAsync(string id)
         {
@@ -624,7 +645,7 @@ namespace Race_boat_app.Controllers
         /// The ID of the event reg that is to be deleted
         /// </param>
         /// <returns>
-        /// Will return the status code of the APIs response, should be 420 No Content  
+        /// Will return the status code of the APIs response, should be 204 No Content  
         /// </returns>
         static async Task<HttpStatusCode> DeleteEventRegAsync(string id)
         {
