@@ -29,19 +29,21 @@ namespace Race_boat_app.Controllers
         /// </returns>
         public IActionResult Index()
         {
+
             try
             {
+                List<EventIn> events = new EventController().AllEvents().Result;
                 HttpContext.Session.SetString("_BoatID", "Empty");
                 if (HttpContext.Session.GetString("_LoggedIn") == "true")
                 {
                     if (HttpContext.Session.GetString("_Admin") == "true")
                     {
                         HttpContext.Session.SetString("_Error", "false");
-                        return View();
+                        return View(events);
                     }
                     HttpContext.Session.SetString("_Admin", "false");
                     HttpContext.Session.SetString("_Error", "false");
-                    return View();
+                    return View(events);
                 }
                 else
                 {
@@ -49,12 +51,12 @@ namespace Race_boat_app.Controllers
                     {
                         HttpContext.Session.SetString("_Error", "false");
                         HttpContext.Session.SetString("_LoggedIn", "false");
-                        return View();
+                        return View(events);
                     }
                     HttpContext.Session.SetString("_Admin", "false");
                     HttpContext.Session.SetString("_Error", "false");
                     HttpContext.Session.SetString("_LoggedIn", "false");
-                    return View();
+                    return View(events);
                 }
             }
             catch (Exception e)

@@ -1,10 +1,12 @@
 ﻿
 @{
     ViewData["Title"] = "Home page";
+    var events = ViewData.Model;
+    var d = DateTime.Today.Date;
+    var current = DateTime.Today;
+    List<EventIn> eDate = new List<EventIn>();
 }
-
 @* Carousel ------------------------------------*@
-
 
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
@@ -17,30 +19,27 @@
             <img class="d-block w-100" src="~/images/boatyellow-edit1.jpg" alt="First slide">
             <div class="hero">
                 <hgroup>
-                    <h1>We are amazing</h1>
-                    <h5>Get start your next awesome project</h5>
+                    <h1>Join hundreds of like minded people today</h1>
                 </hgroup>
-                <button class="btn btn-hero btn-lg" role="button">See all features</button>
+                
             </div>
         </div>
         <div class="carousel-item">
             <img class="d-block w-100" src="~/images/boat-green-edit1.jpg" alt="Second slide">
             <div class="hero">
                 <hgroup>
-                    <h1>We are amazing</h1>
-                    <h5>Get start your next awesome project</h5>
+                    <h1>Join a team</h1>
                 </hgroup>
-                <button class="btn btn-hero btn-lg" role="button">See all features</button>
+                
             </div>
         </div>
         <div class="carousel-item">
             <img class="d-block w-100" src="~/images/boat-red-edit1.jpg" alt="Third slide">
             <div class="hero">
                 <hgroup>
-                    <h1>We are amazing</h1>
-                    <h5>Get start your next awesome project</h5>
+                    <h1>Race in events</h1>
                 </hgroup>
-                <button class="btn btn-hero btn-lg" role="button">See all features</button>
+                
             </div>
         </div>
     </div>
@@ -56,63 +55,35 @@
 
 
 
-
-
-
 @* News ----------------------------------------- *@
 <div class="container">
+    <div class="text-center" style="padding-top: 30px">
+        <h2>Upcoming Events</h2>
+    </div>
     <div class="row">
-        <div class="col-sm-4">
-            <div class="card">
-                <img class="card-img-top" src="~/images/banner1.svg" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+        @foreach (var e in events)
+        {
+            if (DateTime.ParseExact(e.Date, "yyyy-M-d", null) >= DateTime.Today
+                        && DateTime.ParseExact(e.Date, "yyyy-M-d", null) <= DateTime.Today.AddDays(30))
+
+            {
+                eDate.Add(e);
+                eDate.Sort((d1, d2) => d1.Date.CompareTo(d2.Date));
+            }
+        }
+        @foreach (var e in eDate)
+        {
+            <div class="col-sm-4 event">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@e.Name</h5>
+                        <p class="card-text">@e.Location</p>
+                        <p class="card-text">@e.Date</p>
+                        <p class="card-text">@e.TimeStart - @e.TimeEnd</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="card">
-                <img class="card-img-top" src="~/images/banner1.svg" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="card">
-                <img class="card-img-top" src="~/images/banner1.svg" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="card">
-                <img class="card-img-top" src="~/images/banner1.svg" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="card">
-                <img class="card-img-top" src="~/images/banner1.svg" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-        </div>
+        }
     </div>
 </div>
-
 
